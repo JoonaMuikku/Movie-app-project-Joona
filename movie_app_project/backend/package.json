@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+  "testStart": "cross-env NODE_ENV=test node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "devstart": "nodemon index.js"
+    "devStart2": "cross-env NODE_ENV=development nodemon index.js",
+    "devstart1": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
