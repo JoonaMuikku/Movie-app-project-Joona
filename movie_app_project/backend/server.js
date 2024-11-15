@@ -1,10 +1,11 @@
-import  express from 'express'
+import express from 'express'
 import cors from 'cors';
 import bodyParser from 'body-parser';
-//import userRoutes = require('./routes/userRoutes');
-//import movieRoutes = require('./routes/movieRoutes');
-//import reviewRoutes = require('./routes/reviewRoutes');
-//import groupRoutes = require('./routes/groupRoutes');
+//import userRoutes from ('./routes/userRoutes');
+import MovieRouter from './routes/movieRoutes.js';
+//import reviewRoutes from ('./routes/reviewRoutes');
+//import groupRoutes from ('./routes/groupRoutes');
+import { getMoviesfromAPI } from './models/movieModel.js';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -12,11 +13,18 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(bodyParser.json());
 
-app.use('/api/users', userRoutes);
-app.use('/api/movies', movieRoutes);
-app.use('/api/reviews', reviewRoutes);
-app.use('/api/groups', groupRoutes);
+//app.use('/api/users', userRoutes);
+app.use('/', MovieRouter);
+//app.use('/api/reviews', reviewRoutes);
+//app.use('/api/groups', groupRoutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
+    try {
+         getMoviesfromAPI(); // Populate the database with movies on startup
+        console.log('Movies populated from API');
+    } catch (error) {
+        console.error('Error populating movies on startup:', error);
+    }
 });
+
