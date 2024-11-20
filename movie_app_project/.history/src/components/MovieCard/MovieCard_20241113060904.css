@@ -1,0 +1,5 @@
+.card-container{
+  width: 18rem;
+  background-color:var(--card-bg-color);
+  box-shadow: 2px ;
+}

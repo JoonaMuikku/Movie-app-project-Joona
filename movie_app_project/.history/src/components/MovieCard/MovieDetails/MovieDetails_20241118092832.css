@@ -1,0 +1,27 @@
+.movie-details {
+  display: flex;
+  gap: 20px;
+  margin: 20px;
+  padding: 20px;
+  background-color: #222;
+  color: #fff;
+  border-radius: 8px;
+}
+
+.movie-details-image img {
+  width: 300px;
+  border-radius: 8px;
+}
+
+.movie-details-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.movie-details-info h1 {
+  margin-bottom: 20px;
+}
+
+.movie-details-info p {
+  margin: 10px 0;
+}

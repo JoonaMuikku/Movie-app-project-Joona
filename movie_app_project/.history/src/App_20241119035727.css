@@ -1,0 +1,16 @@
+
+
+header {
+  display: flex;
+  justify-content: left;
+  padding: 1rem;
+  z-index: 1;
+  
+}
+
+.main{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 6rem 2rem 2rem 6rem;
+}
