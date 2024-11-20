@@ -51,6 +51,7 @@ const getMoviesfromAPI = async (req, res) => {
 }
 };
 
+
 const getMovieImage = async (req, res) => {
     try {
         //gets movie_id_tmdb from the datbase using the title

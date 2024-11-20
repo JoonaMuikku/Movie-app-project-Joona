@@ -1,62 +1,61 @@
 import './App.css';
 import { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { MovieCard } from './Components/MovieCard/MovieCard';
-
-
-const  baseurl = 'http://localhost:3001';
+import { MovieCard } from './Components/MovieCard/MovieCard.jsx';
+import MovieDetails from './Components/MovieDetails/MovieDetails.jsx'; // Import the new component
+import "bootstrap/dist/css/bootstrap.min.css";
+import Header from './Components/Header/Header.jsx'; // Adjust the path as needed
 
 
 function App() {
-  const [movies, setMovies] = useState([])
-  const [searchTerm, setSearchTerm] = useState('');
-
-
+  const [movies, setMovies] = useState([]);
 
   const getMovies = async () => {
-
     try {
-      const response = await axios.get( baseurl + '/movies');
-      console.log('Full response object:', response); // Log the entire response object
-      setMovies(response.data);  // Set the movies state with the fetched data
+      const { data } = await axios.get(
+        'https://api.themoviedb.org/3/movie/popular?api_key=51def6820408da94d7df01a357112de5'
+      );
+      setMovies(data.results); // Assuming 'results' contains the list of movies
       console.log(movies);
+     // testing link
+      const {imagedata} = await axios.get( "https://api.themoviedb.org/3/movie/912649/images?api_key=cbf0362bb54624f00a21c2e51270b3a0");
+      console.log(imagedata)
     } catch (error) {
-      console.error('Error fetching movies:', error);
-  }
-};  
-useEffect(() => {
-  const fetchMovies = async () => {
-      await getMovies();
+      console.log(error);
+    }
   };
-  fetchMovies();
-}, []);
 
-const filterredMovies = movies.filter(movie => movie.title.toLowerCase().includes(searchTerm.toLowerCase()));
-
-
+  useEffect(() => {
+    getMovies();
+  }, []);
   return (
-    <div className="App">
-      <header className='header'>  
-      <h1 className='heading-1'>Moviq</h1>
-         <div className='search/bar/container'>
-          <input type="text" placeholder="Search for a movie" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className='search-bar'/>
-         </div>
-         </header>
-   
-      <main className='main'>
-        {movies.length > 0 ? (
-          movies.map(movie => <MovieCard 
-            key={movie.id} 
-          movie={{
-            movie_title: movie.title, 
-            movie_rating: movie.rating,
-            movie_poster: movie.poster_image
-          }}
-            />)
-          ) : 'Loading...'}
-      </main>
+    <div className="App bg-dark text-white">
+      <Router>
+        <Header />
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <main className="container mt-4">
+                <div className="row">
+                  {movies.length > 0 ? (
+                    movies.map((movie) => (
+                      <MovieCard key={movie.id} movie={movie} />
+                    ))
+                  ) : (
+                    'Loading...'
+                  )}
+                </div>
+              </main>
+            }
+          />
+          <Route path="/movie/:id" element={<MovieDetails movies={movies} />} />
+        </Routes>
+      </Router>
     </div>
   );
+  
 }
 
 export default App;

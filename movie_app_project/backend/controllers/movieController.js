@@ -1,4 +1,4 @@
-import { getMovies,getMoviesfromAPI } from "../models/movieModel";
+import { getMovies } from "../models/movieModel";
 
 
 const getMovies = async () => {
