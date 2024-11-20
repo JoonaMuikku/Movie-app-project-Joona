@@ -1,0 +1,34 @@
+.card-container {
+  width: 18rem;  /* This controls the overall card width */
+  display: flex;  /* Align items in a row */
+  flex-direction: row;  /* Ensure items are laid out in a row */
+  background-color: var(--card-bg-color);
+  box-shadow: 2px 2px 2px 2px rgba(0,0,0,.8);
+  border-radius: 4px;
+  overflow: hidden;  /* Prevents overflow */
+}
+
+.card-img-container {
+  flex: 0 0 50%;  /* Assign 50% of the card for the image */
+  overflow: hidden;  /* Hide overflow */
+}
+
+.card-img {
+  width: 100%;
+  height: auto;  /* Adjust height automatically */
+  object-fit: cover;  /* Cover the space without distorting */
+}
+
+.card-details {
+  flex: 1;  /* Take the remaining space */
+  color: beige;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  align-items: start;  /* Align text to the start */
+}
+
+.title, .ratings, .genre {
+  width: 100%;  /* Ensure these elements do not overflow */
+}

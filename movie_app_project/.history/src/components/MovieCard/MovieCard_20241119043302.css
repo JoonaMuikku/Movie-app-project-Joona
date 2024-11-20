@@ -1,0 +1,21 @@
+.card-text {
+  display: flex;
+  justify-content: space-between; /* Align rating and release date */
+  font-size: 14px; /* Adjust the font size */
+  margin-bottom: 8px; /* Add spacing below the text */
+}
+
+.bi-star-fill {
+  font-size: 16px; /* Adjust the star icon size */
+  color: #ffc107; /* Yellow star color */
+}
+
+.release-date {
+  font-size: 14px; /* Same size as rating */
+  color: #aaa; /* Muted gray for release date */
+  text-align: right; /* Align to the right */
+}
+
+
+
+

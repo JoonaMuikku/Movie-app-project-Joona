@@ -1,0 +1,40 @@
+* {
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+/* Root variables for easy theme management */
+:root {
+  --card-bg-color: #075985; /* Dark background for card */
+  --text-color: #fff; /* White text color for contrast */
+  --primary-color: #3498db; /* Light blue for ratings or buttons, etc. */
+  --border-radius: 10px; /* Rounded corners for the card */
+  --box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Shadow for depth */
+}
+body {
+  background-color: #075985; /* Darker background for the page */
+  color: var(--text-color);
+  font-family: 'Arial', sans-serif; /* Ensures typography is consistent */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+.header {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  position: fixed;
+  width: 100vw;
+  z-index: 1;
+  background-color: rgb(42, 22, 22);
+}
+
+.main{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 6rem 2rem 2rem 6rem;
+}

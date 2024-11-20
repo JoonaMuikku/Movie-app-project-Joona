@@ -1,0 +1,33 @@
+.movie-details {
+  display: flex; /* Flexbox for horizontal layout */
+  gap: 20px; /* Space between the image and text */
+  align-items: flex-start; /* Align items to the top */
+  margin: 20px;
+  padding: 20px;
+  background-color: #003366; /* Matches your blue theme */
+  color: #fff;
+  border-radius: 8px;
+}
+
+.movie-details-image img {
+  width: 300px; /* Fixed width for the image */
+  border-radius: 8px; /* Rounded corners for the image */
+}
+
+.movie-details-info {
+  display: flex;
+  flex-direction: column; /* Stack text items vertically */
+  justify-content: flex-start;
+  max-width: 600px; /* Limit the width of the text section */
+text-align: ;
+}
+
+.movie-details-info h1 {
+  margin-bottom: 20px;
+  font-size: 2em;
+}
+
+.movie-details-info p {
+  margin: 10px 0;
+  line-height: 1.5; /* Improve readability */
+}
