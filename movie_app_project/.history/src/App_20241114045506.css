@@ -1,0 +1,39 @@
+* {
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+:root {
+  --card-bg-color: #2c2c2c;  /* Dark gray for better contrast */
+  background-color: #222;    /* Dark background for the whole page */
+  color: #fff;
+}
+
+body {
+  background-color: var(--background-color);
+  color: #fff;  /* Ensures all text is white unless specified otherwise */
+}
+
+body {
+  background-color:#075985;
+  overflow-x: hidden;
+}
+.header {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  position: fixed;
+  width: 100vw;
+  z-index: 1;
+  background-color: #075985;
+}
+.heading-1{
+  color:black;
+}
+.main{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 8rem 2rem 2rem 6rem;
+}

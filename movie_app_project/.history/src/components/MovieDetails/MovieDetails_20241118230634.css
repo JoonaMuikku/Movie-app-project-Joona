@@ -1,0 +1,35 @@
+.movie-details {
+  display: flex; /* Flexbox for horizontal layout */
+  gap: 20px; /* Space between the image and text */
+  align-items: flex-start; /* Align items to the top */
+  margin: 20px;
+  padding: 20px;
+  background-color: #1e292f; /* Matches your blue theme */
+  color: #fff;
+  border-radius: 8px;
+}
+
+.movie-details-image img {
+  width: 300px; /* Set a fixed width for the image */
+  border-radius: 8px; /* Optional: Rounded corners */
+}
+
+.movie-details-info {
+  flex: 1; /* Make the text section take the remaining space */
+  display: flex;
+  flex-direction: column; /* Stack text items vertically */
+  justify-content: flex-start; /* Align text to the top */
+}
+
+.movie-details-info h1 {
+  z-index: ;
+  color: #ffffff; /* White text for visibility */
+  margin-bottom: 20px;
+  font-size: 2em; /* Ensure title is large enough */
+}
+
+
+.movie-details-info p {
+  margin: 10px 0;
+  line-height: 1.5; /* Improve text readability */
+}

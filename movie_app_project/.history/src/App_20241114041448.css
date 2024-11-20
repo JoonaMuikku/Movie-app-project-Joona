@@ -1,0 +1,26 @@
+* {
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+:root{
+  background-color: #075985;
+  color: #fff;
+}
+body {
+  background-color: #075985;
+  overflow-x: hidden;
+}
+.header {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+}
+>
+.main{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  
+}

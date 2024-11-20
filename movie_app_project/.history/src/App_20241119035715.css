@@ -1,0 +1,24 @@
+* {
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+/* Root variables for easy theme management */
+
+
+
+.header {
+  display: flex;
+  justify-content: left;
+  padding: 1rem;
+  z-index: 1;
+  
+}
+
+.main{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 6rem 2rem 2rem 6rem;
+}
