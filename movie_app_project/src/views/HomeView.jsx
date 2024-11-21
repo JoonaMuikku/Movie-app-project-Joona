@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { MovieCard } from '../components/MovieCard/MovieCard';
+import { MovieCard } from '../Components/MovieCard/MovieCard';
 import { Carousel } from 'react-bootstrap';
 
 export default function HomeView() {
@@ -30,7 +30,7 @@ export default function HomeView() {
     return result;
   };
 
-  const movieChunks = chunkMovies(movies, 8); // 8 movies in one carousel group (in 1 display)
+  const movieChunks = chunkMovies(movies, 4); // 8 movies in one carousel group (in 1 display)
 
   return (
     <>

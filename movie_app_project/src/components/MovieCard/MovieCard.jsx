@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 
 export const MovieCard = ({ movie }) => {
   const navigate = useNavigate();
-  const imageUrl = `https://image.tmdb.org/t/p/w200${movie.poster_path}`;
+  const imageUrl = `https://image.tmdb.org/t/p/original/${movie.poster_path}`;
   const { vote_average, original_title } = movie;
 
 
@@ -21,7 +21,7 @@ export const MovieCard = ({ movie }) => {
           src={imageUrl}
           className="card-img-top img-fluid"
           alt={movie.title || "Movie image"}
-          style={{ height: "300px", objectFit: "cover" }}
+          style={{  objectFit: "cover" }}
         />
         <div className="card-body d-flex flex-column justify-content-between">
           <h5 className="card-title text-truncate">{original_title}</h5>

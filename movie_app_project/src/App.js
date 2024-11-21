@@ -1,25 +1,32 @@
 import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation, NavLink, Link } from 'react-router-dom';
+import "bootstrap/dist/css/bootstrap.min.css";
+import Header from './Components/Header/Header';
+import HomeView from './views/HomeView';
+import SignInView from './views/SignInView';
+import SignUpView from './views/SignUpView';
+import MoviesView from './views/MoviesView';
+import GroupsView from './views/GroupsView';
+import MovieDetails from './views/MovieDetailsView/MovieDetails';
 
-function App() {
+
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+<div className="App bg-dark text-white">
+      <Router>
+        <Header />
+
+        <Routes>
+          <Route path="/" element={<HomeView />} />
+          <Route path="/sign-in" element={<SignInView />} />
+          <Route path="/sign-up" element={<SignUpView />} />
+          <Route path="/movies" element={<MoviesView />} />
+          <Route path="/groups" element={<GroupsView />} />
+          <Route path="/movie/:id" element={<MovieDetails />} />
+        </Routes>
+      </Router>
     </div>
   );
   
 }
-
-export default App;
