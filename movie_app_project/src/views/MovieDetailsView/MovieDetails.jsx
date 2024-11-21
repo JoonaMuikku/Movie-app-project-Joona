@@ -1,12 +1,10 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
-import './MovieDetails.css';
+import React from "react";
+import { useLocation } from "react-router-dom";
+import "./MovieDetails.css";
 
-
-export default function MovieDetails ({ movie }) {
-  console.log("DETAILS: ", movie);
-  const { id } = useParams(); // Get the movie ID from the URL
-  // const movie = movies.find((m) => m.id === parseInt(id)); // Find the movie with the matching ID
+export default function MovieDetails() {
+  const location = useLocation();
+  const movie = location.state?.movie;
 
   if (!movie) {
     return <h2>Movie not found!</h2>;
@@ -28,5 +26,5 @@ export default function MovieDetails ({ movie }) {
       </div>
     </div>
   );
-};
+}
 

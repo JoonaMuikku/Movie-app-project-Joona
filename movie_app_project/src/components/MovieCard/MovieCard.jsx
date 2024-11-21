@@ -7,7 +7,7 @@ export const MovieCard = ({ movie }) => {
 
 
   const toMovieDetails = () => {
-    navigate(`/movie/${movie.id}`);
+    navigate(`/movie/${movie.id}`, { state: { movie } });
   };
 
   return (
