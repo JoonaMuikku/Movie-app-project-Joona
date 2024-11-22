@@ -1,0 +1,61 @@
+.header {
+  display: flex;
+  justify-content: left;
+  padding: 1rem;
+  z-index: 1;
+}
+
+.main{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 6rem 2rem 2rem 6rem;
+}
+
+/* TODO: make carousel design RESPONSIVE */
+
+.carousel-control-prev {
+  transform: translateX(-190px); /* Oddialenie doľava */
+}
+
+.carousel-control-next {
+  transform: translateX(190px); /* Oddialenie doprava */
+}
+
+
+.btn-orange-transparent {
+  background-color: transparent;
+  border: 2px solid var(--orange) !important;
+  color: #FFF !important;
+}
+
+.btn-orange-transparent a {
+  text-decoration: none;
+  color: #FFF;
+}
+
+.btn-orange {
+  background-color: var(--orange) !important; 
+  color: #fff !important;
+  border: none;
+}
+
+.btn-orange-transparent:hover {
+  background-color: var(--orange) !important;
+  color: #fff;
+}
+
+.btn-orange:hover {
+  background-color: var(--orange-hover) !important;
+  color: #fff;
+}
+
+.elem-hover:hover {
+  background-color: var(--orange);
+}
+
+
+._navigation {
+  border-bottom: 2px solid var(--gray);
+  z-index: 3000;
+}
