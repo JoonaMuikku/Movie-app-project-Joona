@@ -1,91 +1,80 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import "./Header.css";
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { fetchGenres } from "../../Api/movieApi";
+import SearchBar from './SearchBar'; // Ensure this import path is correct
+import SideBarMenu from "./SideBarMenu";
+import '../../App.css';
 
 export default function Header() {
+    const [genres, setGenres] = useState([]);
+    const [filters, setFilters] = useState({
+        title: "",
+        genre: "",
+        year: "",
+    });
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const navigate = useNavigate();
 
-  return (
-    <nav className="navbar navbar-expand-xl navbar-dark bg-dark">
-      <div className="container-fluid">
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+    };
 
-        {/* App Name */}
-        <div>
-          <Link to="/" className="navbar-brand fw-bold fs-3">
-            Moviq
-          </Link>
+    // Fetch genres on mount
+    useEffect(() => {
+        const fetchGenreData = async () => {
+            try {
+                const genresData = await fetchGenres();
+                setGenres(genresData);
+            } catch (error) {
+                console.error("Error fetching genres:", error);
+            }
+        };
+        fetchGenreData();
+    }, []);
+
+    // Handle search
+    const handleSearch = (e) => {
+        e.preventDefault();
+        navigate(`/search?title=${filters.title}&genre=${filters.genre}&year=${filters.year}`);
+    };
+
+    return (
+        <div className="sticky-top py-3 _navigation">
+            <nav className="navbar navbar-dark bg-dark">
+                <div className="container-fluid">
+                    <div>
+                        <button
+                            className="navbar-toggler me-3"
+                            type="button"
+                            onClick={toggleSidebar}
+                            aria-label="Toggle navigation"
+                        >
+                            <i className="bi bi-list"></i>
+                        </button>
+
+                        {/* App Name */}
+                        <Link to="/" className="navbar-brand fw-bold fs-3">
+                            Moviq
+                        </Link>
+                    </div>
+
+                    {/* Search Bar */}
+                    <SearchBar 
+                        filters={filters}
+                        setFilters={setFilters}
+                        handleSearch={handleSearch}
+                    />
+
+                    <button className="btn btn-orange-transparent fs-6 rounded-0 px-4 px-3">
+                        <Link to="sign-in">
+                            Sign In
+                        </Link>
+                    </button>
+                </div>
+            </nav>
+
+            {/* Sidebar Menu */}
+            <SideBarMenu isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
         </div>
-
-
-
-        {/* Hamburger Menu Icon */}
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <i className="bi bi-list"></i>
-        </button>
-
-
-        {/* Collapsible Links and Search Bar */}
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            {/* Dropdown Menu */}
-            <li className="nav-item dropdown">
-              <button
-                className="btn btn-secondary dropdown-toggle"
-                type="button"
-                id="navbarDropdown"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                <i className="bi bi-list"></i>
-              </button>
-              <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li>
-                  <Link to='sign-in' className="dropdown-item">
-                    Sign In
-                  </Link>
-                </li>
-                <li>
-                  <Link to='sign-up' className="dropdown-item">
-                    Sign Up
-                  </Link>
-                </li>
-                <li>
-                  <Link to='movies' className="dropdown-item">
-                    Movies
-                  </Link>
-                </li>
-                <li>
-                  <Link to='groups' className="dropdown-item">
-                    Groups
-                  </Link>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-        
-        {/* Search Bar */}
-        <div>
-          <form className="search-bar mx-auto d-flex align-items-center">
-            <input
-              className="form-control search-input"
-              type="text"
-              placeholder="Enter keywords"
-              aria-label="Search"
-            />
-            <button className="btn btn-orange search-btn" type="submit">
-              <i className="bi bi-search"></i>
-            </button>
-          </form>
-        </div>
-      </div>
-    </nav>
-  );
+    );
 }

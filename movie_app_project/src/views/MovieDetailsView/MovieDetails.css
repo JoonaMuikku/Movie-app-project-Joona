@@ -33,3 +33,17 @@
   margin: 10px 0;
   line-height: 1.5; /* Improve text readability */
 }
+
+
+/*
+margin: 10px 0;
+line-height: 1.5; /* Improve text readability */
+
+
+
+
+/* make for cast*/
+.movie-cast {
+  display: flex;
+  flex-direction: column;
+}

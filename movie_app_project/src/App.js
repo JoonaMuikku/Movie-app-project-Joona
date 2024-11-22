@@ -9,7 +9,8 @@ import SignUpView from './views/SignUpView';
 import MoviesView from './views/MoviesView';
 import GroupsView from './views/GroupsView';
 import MovieDetails from './views/MovieDetailsView/MovieDetails';
-
+import SearchView from './views/SearchView';
+import Footer from './Components/Footer/Footer';
 
 export default function App() {
   return (
@@ -24,7 +25,9 @@ export default function App() {
           <Route path="/movies" element={<MoviesView />} />
           <Route path="/groups" element={<GroupsView />} />
           <Route path="/movie/:id" element={<MovieDetails />} />
+          <Route path="/search" element={<SearchView />} />
         </Routes>
+          <Footer />
       </Router>
     </div>
   );
