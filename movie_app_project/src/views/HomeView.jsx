@@ -3,6 +3,8 @@ import axios from 'axios';
 import { MovieCard } from '../Components/MovieCard/MovieCard';
 import { Carousel } from 'react-bootstrap';
 
+
+
 export default function HomeView() {
   const [movies, setMovies] = useState([]);
 
@@ -20,6 +22,8 @@ export default function HomeView() {
   useEffect(() => {
     getMovies();
   }, []);
+
+  
 
   // Dividing movies into 2 rows 
   const chunkMovies = (arr, chunkSize) => {
