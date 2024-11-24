@@ -2,18 +2,20 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import SideBarMenu from "./SideBarMenu";
+import "./Header.css";
 
 export default function HeaderView() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
+    setIsSidebarOpen((prev) => !prev);
+};
 
   return (
     <div className="sticky-top py-3 _navigation">
       <nav className="navbar navbar-dark bg-dark">
         <div className="container-fluid">
+          
 
           <div>
             <button

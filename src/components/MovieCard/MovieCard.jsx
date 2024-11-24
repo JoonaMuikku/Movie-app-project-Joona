@@ -2,8 +2,11 @@ import { useNavigate } from "react-router-dom";
 
 export const MovieCard = ({ movie }) => {
   const navigate = useNavigate();
-  const imageUrl = `https://image.tmdb.org/t/p/w200${movie.poster_path}`;
-  const { vote_average, original_title } = movie;
+  const imageUrl = movie.poster_path
+      ? `https://image.tmdb.org/t/p/w200${movie.poster_path}`
+      : 'https://via.placeholder.com/200x300'; // Fallback image
+
+  const { vote_average, original_title, release_date } = movie;
 
 
   const toMovieDetails = () => {
@@ -31,7 +34,7 @@ export const MovieCard = ({ movie }) => {
               <span>{vote_average ? vote_average.toFixed(1) : "N/A"}</span>
             </span>
             <span>
-              {movie.release_date ? movie.release_date.split("-")[0] : "N/A"}
+              {release_date ? movie.release_date.split("-")[0] : "N/A"}
             </span>
           </p>
 

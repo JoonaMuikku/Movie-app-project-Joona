@@ -9,15 +9,26 @@ function SignUpView() {
       <div className="signup-card">
         <h2 className="text-center mb-4" style={{ color: "#000" }}>Sign Up</h2>
         <form>
-          <div className="mb-3">
-            <label htmlFor="username" className="form-label" style={{ color: "#000" }}>
-              Username
+        <div className="mb-3">
+            <label htmlFor="firstName" className="form-label" style={{ color: "#000" }}>
+              First Name
             </label>
             <input
               type="text"
               className="form-control"
               id="username"
-              placeholder="Enter username"
+              placeholder="Enter First Name"
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="lastName" className="form-label" style={{ color: "#000" }}>
+              Last Name
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="username"
+              placeholder="Enter Last Name"
             />
           </div>
           <div className="mb-3">

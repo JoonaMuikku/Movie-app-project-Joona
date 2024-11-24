@@ -27,6 +27,7 @@ CREATE TABLE group_users (
 -- Movies Table
 CREATE TABLE movies (
    movie_id SERIAL PRIMARY KEY,
+    tmdb_id INTEGER UNIQUE, -- Add this to link with TMDB API
    title VARCHAR NOT NULL,
    description TEXT,
    release_date DATE,
@@ -51,13 +52,4 @@ CREATE TABLE reviews (
    rating INTEGER CHECK (rating BETWEEN 1 AND 5),
    shared_url VARCHAR,
    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Showtimes Table
-CREATE TABLE showtimes (
-   showtime_id SERIAL PRIMARY KEY,
-   movie_id INTEGER REFERENCES movies(movie_id),
-   theater_name VARCHAR NOT NULL,
-   showtime_date DATE NOT NULL,
-   showtime_time TIME NOT NULL
 );
