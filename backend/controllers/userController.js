@@ -15,7 +15,9 @@ export const postSignup = async (req, res, next) => {
         const result = await createUser(first_name, last_name, email, hashedPassword);
         const user = result.rows[0];
 
-        res.status(201).json({ message: "User registered successfully", user });
+        const token = createToken({ user_id: user.user_id, email: user.email }); // Generate token
+
+        res.status(201).json({ message: "User registered successfully", user, token });
     } catch (error) {
         if (error.code === "23505") {
             next(new ApiError("Email already exists", 409));
@@ -44,6 +46,7 @@ export const postLogin = async (req, res, next) => {
                 user_id: user.user_id,
                 first_name: user.first_name,
                 last_name: user.last_name,
+                email: user.email,
             },
             token,
         });
@@ -55,9 +58,7 @@ export const postLogin = async (req, res, next) => {
 // Delete user account
 export const deleteAccount = async (req, res, next) => {
     try {
-        const { email } = req.body;
-
-        if (!email) throw new ApiError("Email is required", 400);
+        const email = req.user.email; // Fetch email from the decoded token
 
         const result = await deleteUserByEmail(email);
         if (result.rowCount > 0) {

@@ -1,34 +1,36 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
+import { toast } from "react-toastify"; // Import toast
+import "react-toastify/dist/ReactToastify.css"; // Import toastify styles
 import "./SignUpView.css";
 
 function SignUpView() {
-  const { login } = useAuth();
+  const { signupUser } = useAuth(); // Use signupUser from AuthContext
   const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/users/signup", {
+      // Use the AuthContext's signupUser function
+      await signupUser({
         first_name: firstName,
         last_name: lastName,
         email,
         password,
       });
-      login(response.data.user); // Save user data in AuthContext
+      toast.success("Signup successful! You are now logged in."); // Show success toast
       navigate("/"); // Redirect to the home page
     } catch (err) {
+      // Handle error messages from the backend
       if (err.response && err.response.status === 409) {
-        setError("Email already exists. Please use a different email.");
+        toast.error("Email already exists. Please use a different email."); // Show error toast for duplicate email
       } else {
-        setError("Error signing up. Please try again.");
+        toast.error("Error signing up. Please try again."); // Show generic error toast
       }
     }
   };
@@ -90,7 +92,6 @@ function SignUpView() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          {error && <p className="text-danger">{error}</p>}
           <button type="submit" className="btn btn-orange w-100">
             Sign Up
           </button>
