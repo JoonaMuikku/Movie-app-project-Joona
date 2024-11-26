@@ -1,0 +1,85 @@
+.movie-details {
+  display: flex; /* Flexbox for horizontal layout */
+  gap: 20px; /* Space between the image and text */
+  align-items: flex-start; /* Align items to the top */
+  margin: 20px;
+  padding: 20px;
+  background-color: #1e292f; /* Matches your blue theme */
+  color: #fff;
+  border-radius: 8px;
+}
+
+.movie-details-image img {
+  width: 300px; /* Set a fixed width for the image */
+  border-radius: 8px; /* Optional: Rounded corners */
+}
+
+.movie-details-info {
+  flex: 1; /* Make the text section take the remaining space */
+  display: flex;
+  flex-direction: column; /* Stack text items vertically */
+  justify-content: flex-start; /* Align text to the top */
+}
+
+.movie-details-info h1 {
+  z-index: 1;
+  color: #ffffff; /* White text for visibility */
+  margin-bottom: 20px;
+  font-size: 2em; /* Ensure title is large enough */
+}
+
+
+.movie-details-info p {
+  margin: 10px 0;
+  line-height: 1.5; /* Improve text readability */
+}
+<<<<<<< HEAD:movie_app_project/src/views/MovieDetailsView/MovieDetails.css
+
+
+/*
+margin: 10px 0;
+line-height: 1.5; /* Improve text readability */
+
+
+
+
+/* make for cast*/
+.movie-cast {
+  display: flex;
+  flex-direction: column;
+}
+=======
+.movie-cast {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* Space between cast members */
+  margin-top: 20px;
+}
+
+.cast-member {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 150px; /* Fixed width for each cast member */
+  text-align: center;
+}
+
+.cast-member img {
+  width: 100px; /* Fixed width for cast member images */
+  height: 150px; /* Fixed height for cast member images */
+  border-radius: 8px; /* Optional: Rounded corners */
+  object-fit: cover; /* Ensure image covers the area */
+}
+
+.cast-member-name {
+  margin-top: 10px;
+  font-weight: bold;
+  color: #ffffff; /* White text for visibility */
+}
+
+.cast-member-character {
+  margin-top: 5px;
+  color: #cccccc; /* Light gray text for character name */
+}
+
+>>>>>>> 296e7f0a2684e425857d08862ea9029bc7da0e45:src/views/MovieDetailsView/MovieDetails.css
