@@ -1,3 +1,4 @@
+
 import pool from "../config/db.js";
 
 // Insert a new user

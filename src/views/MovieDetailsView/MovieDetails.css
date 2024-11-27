@@ -33,36 +33,17 @@
   margin: 10px 0;
   line-height: 1.5; /* Improve text readability */
 }
+
+
+/*
+margin: 10px 0;
+line-height: 1.5; /* Improve text readability */
+
+
+
+
+/* make for cast*/
 .movie-cast {
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px; /* Space between cast members */
-  margin-top: 20px;
-}
-
-.cast-member {
-  display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 150px; /* Fixed width for each cast member */
-  text-align: center;
 }
-
-.cast-member img {
-  width: 100px; /* Fixed width for cast member images */
-  height: 150px; /* Fixed height for cast member images */
-  border-radius: 8px; /* Optional: Rounded corners */
-  object-fit: cover; /* Ensure image covers the area */
-}
-
-.cast-member-name {
-  margin-top: 10px;
-  font-weight: bold;
-  color: #ffffff; /* White text for visibility */
-}
-
-.cast-member-character {
-  margin-top: 5px;
-  color: #cccccc; /* Light gray text for character name */
-}
-
