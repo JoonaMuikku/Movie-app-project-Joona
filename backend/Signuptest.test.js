@@ -41,7 +41,7 @@ describe('API should signup user', () => {
       expect(loginResponse.status).to.equal(200);
       expect(loginResponse.data).to.include.all.keys('message', 'user', 'token');
 
-      // Save the token for later use
+      // Save the token to delete user after test
    
       token = loginResponse.data.token;
 
