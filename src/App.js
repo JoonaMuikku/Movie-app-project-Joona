@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "react-toastify/dist/ReactToastify.css"; // Import toastify CSS
 import { ToastContainer } from "react-toastify"; // Import ToastContainer
 import Header from './components/Header/Header.jsx';
+import Footer from './components/Footer/Footer.jsx';
 import HomeView from './views/HomeView';
 import SignInView from './views/SignUpandinview/SignInView.jsx';
 import SignUpView from './views/SignUpandinview/SignUpView.jsx';
@@ -12,10 +13,11 @@ import MoviesView from './views/MoviesView';
 import GroupsView from './views/GroupsView';
 import MovieDetails from './views/MovieDetailsView/MovieDetails';
 import SearchView from './views/SearchView';
-import Footer from './components/Footer/Footer.jsx';
+
 
 export default function App() {
   return (
+
     <div className="App bg-dark text-white">
       <Router>
         <Header />
@@ -31,7 +33,7 @@ export default function App() {
         </Routes>
         <Footer />
       </Router>
-      <ToastContainer position="top-center" autoClose={3000} /> {/* Add ToastContainer */}
+      <ToastContainer position="top-center" autoClose={2000} /> {/* Add ToastContainer */}
     </div>
   );
 }

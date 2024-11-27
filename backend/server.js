@@ -1,4 +1,3 @@
-
 import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
@@ -6,7 +5,7 @@ import bodyParser from 'body-parser';
 import movieRoutes from './routes/movieRoutes.js';
 import pool from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
-
+import favoritesRoutes from "./routes/favoritesRoutes.js";
 
 dotenv.config();
 
@@ -14,16 +13,19 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+// Movie Routes
 app.use('/api', movieRoutes);
 
-// Routes
+// User Routes
 app.use('/api/users', userRoutes);
+
+//Favorites Routes
+app.use("/api/favorites", favoritesRoutes);
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
     res.status(statusCode).json({ error: err.message });
 });
-
 // Test the database connection
 (async () => {
     try {
@@ -34,7 +36,6 @@ app.use((err, req, res, next) => {
         process.exit(1); // Exit the process if the database connection fails
     }
 })();
-
 // Start the server
 const PORT = process.env.PORT;
 app.listen(PORT, () => {

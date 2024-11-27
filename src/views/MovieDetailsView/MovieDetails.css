@@ -7,6 +7,7 @@
   background-color: #1e292f; /* Matches your blue theme */
   color: #fff;
   border-radius: 8px;
+  flex-direction: column;
 }
 
 .movie-details-image img {
@@ -44,6 +45,7 @@ line-height: 1.5; /* Improve text readability */
 
 /* make for cast*/
 .movie-cast {
+  padding-right: 0px;
   display: flex;
   flex-direction: column;
 }
