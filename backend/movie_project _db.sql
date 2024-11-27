@@ -1,11 +1,3 @@
-drop table if exists reviews;
-drop table if exists favorites;
-drop table if exists movies;
-drop table if exists group_users;
-drop table if exists groups;
-drop table if exists users;
-   
-
 
 -- Users Table
 CREATE TABLE users (

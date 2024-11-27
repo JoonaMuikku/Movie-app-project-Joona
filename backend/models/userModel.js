@@ -1,3 +1,4 @@
+
 import pool from "../config/db.js";
 
 // Insert a new user
@@ -33,6 +34,7 @@ export const getUserById = async (user_id) => {
 
 // Delete a user by email
 export const deleteUserByEmail = async (email) => {
-    const query = `DELETE FROM users WHERE email = $1;`;
+    console.log("Deleting user with email:", email); // Debug log
+    const query = `DELETE FROM users WHERE email = $1 RETURNING *;`;
     return pool.query(query, [email]);
 };
