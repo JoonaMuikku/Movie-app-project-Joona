@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useAuth } from "../../context/AuthContext";
+import { toast } from "react-toastify"; 
 
 function SignInView() {
-  const { login } = useAuth();
+  const { loginUser } = useAuth(); // Use loginUser from AuthContext
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -13,14 +13,13 @@ function SignInView() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/users/login", {
-        email,
-        password,
-      });
-      login(response.data.user); // Save user data in AuthContext
+      // Use the AuthContext's loginUser function
+      await loginUser({ email, password });
+      toast.success("Login successful!"); // Show success toast
       navigate("/"); // Redirect to the home page
     } catch (err) {
-      setError("Invalid email or password");
+      toast.error("Invalid email or password."); // Show error toast
+      setError("Invalid email or password.");
     }
   };
 

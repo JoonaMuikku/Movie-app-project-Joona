@@ -2,6 +2,8 @@ import './App.css';
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import "bootstrap/dist/css/bootstrap.min.css";
+import "react-toastify/dist/ReactToastify.css"; // Import toastify CSS
+import { ToastContainer } from "react-toastify"; // Import ToastContainer
 import Header from './components/Header/Header.jsx';
 import HomeView from './views/HomeView';
 import SignInView from './views/SignUpandinview/SignInView.jsx';
@@ -29,6 +31,7 @@ export default function App() {
         </Routes>
         <Footer />
       </Router>
+      <ToastContainer position="top-center" autoClose={3000} /> {/* Add ToastContainer */}
     </div>
   );
 }
