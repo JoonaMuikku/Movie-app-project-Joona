@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchMovies } from '../api/movieApi.js';
+import { fetchMovies } from '../api/movieApi.jsx';
 import { MovieCard } from '../components/MovieCard/MovieCard.jsx';
 import { Carousel } from 'react-bootstrap';
 
