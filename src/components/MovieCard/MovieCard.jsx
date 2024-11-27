@@ -1,23 +1,68 @@
-
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { useAuth } from "../../context/AuthContext";
+import { fetchFavorites, addFavorite, removeFavorite } from "../../api/favoriteApi"
+import "./MovieCard.css";
 
 export const MovieCard = ({ movie }) => {
   const navigate = useNavigate();
+  const { token, user } = useAuth(); // Get the logged-in user's token and details
+  const [isFavorited, setIsFavorited] = useState(false);
+
   const imageUrl = movie.poster_path
-      ? `https://image.tmdb.org/t/p/w200${movie.poster_path}`
-      : 'https://via.placeholder.com/200x300'; // Fallback image
+    ? `https://image.tmdb.org/t/p/w200${movie.poster_path}`
+    : "https://via.placeholder.com/200x300"; // Fallback image
 
   const { vote_average, original_title, release_date } = movie;
-
 
   const toMovieDetails = () => {
     navigate(`/movie/${movie.id}`, { state: { movie } });
   };
 
+  // Fetch initial favorite status (optional for performance)
+  useEffect(() => {
+    const checkFavoriteStatus = async () => {
+      if (!user || !token) return;
+      try {
+        const favorites = await fetchFavorites(token);
+        const isFavorited = favorites.some((fav) => fav.tmdb_id === movie.id);
+        setIsFavorited(isFavorited);
+      } catch (error) {
+        console.error("Failed to fetch favorites", error.message);
+      }
+    };
+
+    checkFavoriteStatus();
+  }, [movie.id, token, user]);
+
+  // Toggle favorite status
+  const toggleFavorite = async (e) => {
+    e.stopPropagation(); // Prevent navigation to movie details when clicking the heart icon
+
+    if (!user || !token) {
+      toast.error("Please log in to manage your favorites.");
+      return;
+    }
+
+    try {
+      if (isFavorited) {
+        await removeFavorite(movie.id, token);
+        toast.success("Movie removed from favorites.");
+      } else {
+        await addFavorite(movie.id, token);
+        toast.success("Movie added to favorites.");
+      }
+      setIsFavorited(!isFavorited); // Toggle the state
+    } catch (error) {
+      toast.error("Failed to update favorites. Please try again.");
+    }
+  };
+
   return (
-    <div>
+    <div className="movie-card">
       <div
-        className="card bg-dark text-white"
+        className="card bg-dark text-white position-relative"
         onClick={toMovieDetails}
         style={{ cursor: "pointer" }}
       >
@@ -38,11 +83,18 @@ export const MovieCard = ({ movie }) => {
               {release_date ? movie.release_date.split("-")[0] : "N/A"}
             </span>
           </p>
-
           <button className="btn btn-dark watch-now-button d-flex align-items-center justify-content-center gap-2">
             <span className="bi bi-play-circle"></span> Watch now
           </button>
         </div>
+
+        {/* Heart Icon for Favorites */}
+        <button
+          className="favorite-btn position-absolute top-0 end-0 m-2"
+          onClick={toggleFavorite}
+        >
+          {isFavorited ? "💖" : "🤍"}
+        </button>
       </div>
     </div>
   );
