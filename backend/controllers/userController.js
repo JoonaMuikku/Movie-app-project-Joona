@@ -16,7 +16,7 @@ export const postSignup = async (req, res, next) => {
         const user = result.rows[0];
 
         const token = createToken({ user_id: user.user_id, email: user.email }); // Generate token
-        console.log(token);
+      
         res.status(201).json({ message: "User registered successfully", user, token });
     } catch (error) {
         if (error.code === "23505") {
