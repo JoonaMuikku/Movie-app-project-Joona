@@ -14,6 +14,16 @@ export const login = async (credentials) => {
     return response.data;
 };
 
+// Logout
+export const logout = async (token) => {
+    const response = await axios.post(`${API_BASE_URL}/logout`,{}, // No body needed
+        {
+            headers: { Authorization: `Bearer ${token}` },
+        }
+    );
+    return response.data;
+};
+
 // Delete Account
 export const deleteAccount = async (token) => {
     // console.log("Sending Token:", token); // Debugging

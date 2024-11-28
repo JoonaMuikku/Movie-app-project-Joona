@@ -1,5 +1,5 @@
 import { createUser, getUserByEmail, deleteUserByEmail } from "../models/userModel.js";
-import { createToken, hashPassword, comparePassword } from "../middleware/authMiddleware.js";
+import { createToken, hashPassword, comparePassword, blacklistToken } from "../middleware/authMiddleware.js";
 import { ApiError } from "../helpers/errorClass.js";
 
 // User registration
@@ -53,6 +53,22 @@ export const postLogin = async (req, res, next) => {
     } catch (error) {
         next(error);
     }
+};
+
+// User logout
+export const logoutUser = (req, res, next) => {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return next(new ApiError("Authorization token is missing or invalid", 401));
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    // Blacklist the token
+    blacklistToken(token);
+
+    res.status(200).json({ message: "Logged out successfully" });
 };
 
 // Delete user account
