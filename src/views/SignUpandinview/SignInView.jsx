@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { toast } from "react-toastify"; 
+import { toast } from "react-toastify";
+import "./SignInSignUpView.css";
 
 function SignInView() {
-  const { loginUser } = useAuth(); // Use loginUser from AuthContext
+  const { loginUser } = useAuth();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -24,69 +25,41 @@ function SignInView() {
   };
 
   return (
-    <div
-      className="modal show d-block"
-      style={{
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <div className="modal-dialog">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title" style={{ color: "#000" }}>Sign In</h5>
-            <button
-              type="button"
-              className="btn-close"
-              onClick={() => navigate("/")}
-            ></button>
+    <div className="signin-container">
+      <div className="signin-card">
+        <h2>Sign In</h2> {/* Title explicitly set */}
+        <form onSubmit={handleSubmit}>
+          <div className="mb-3">
+            <label htmlFor="email" className="form-label">Email address</label>
+            <input
+              type="email"
+              className="form-control"
+              id="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
-          <div className="modal-body">
-            <form onSubmit={handleSubmit}>
-              <div className="mb-3">
-                <label htmlFor="email" className="form-label" style={{ color: "#000" }}>
-                  Email address
-                </label>
-                <input
-                  type="email"
-                  className="form-control"
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="password" className="form-label" style={{ color: "#000" }}>
-                  Password
-                </label>
-                <input
-                  type="password"
-                  className="form-control"
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </div>
-              {error && <p className="text-danger">{error}</p>}
-              <button type="submit" className="btn btn-orange w-100">
-                Sign In
-              </button>
-            </form>
-            <p className="text-center mt-3" style={{ color: "#000" }}>
-              No account?{" "}
-              <span
-                className="text-primary"
-                role="button"
-                style={{ textDecoration: "underline", cursor: "pointer", color: "#007bff" }}
-                onClick={() => navigate("/sign-up")}
-              >
-                Sign up
-              </span>
-            </p>
+          <div className="mb-3">
+            <label htmlFor="password" className="form-label">Password</label>
+            <input
+              type="password"
+              className="form-control"
+              id="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
-        </div>
+          {error && <p className="text-danger">{error}</p>}
+          <button type="submit" className="btn btn-orange w-100">Sign In</button>
+        </form>
+        <p className="text-center mt-3">
+          No account?{" "}
+          <span className="text-primary" onClick={() => navigate("/sign-up")}>
+            Sign Up
+          </span>
+        </p>
       </div>
     </div>
   );
