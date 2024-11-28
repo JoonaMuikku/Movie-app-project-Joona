@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { toast } from "react-toastify"; // Import toast
 import "react-toastify/dist/ReactToastify.css"; // Import toastify styles
-import "./SignUpView.css";
+import "./SignInSignUpView.css";
 
 function SignUpView() {
   const { signupUser } = useAuth(); // Use signupUser from AuthContext
@@ -38,12 +38,10 @@ function SignUpView() {
   return (
     <div className="signup-container">
       <div className="signup-card">
-        <h2 className="text-center mb-4" style={{ color: "#000" }}>Sign Up</h2>
+        <h2>Sign Up</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label htmlFor="firstName" className="form-label" style={{ color: "#000" }}>
-              First Name
-            </label>
+            <label htmlFor="firstName" className="form-label">First Name</label>
             <input
               type="text"
               className="form-control"
@@ -54,9 +52,7 @@ function SignUpView() {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="lastName" className="form-label" style={{ color: "#000" }}>
-              Last Name
-            </label>
+            <label htmlFor="lastName" className="form-label">Last Name</label>
             <input
               type="text"
               className="form-control"
@@ -67,9 +63,7 @@ function SignUpView() {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="email" className="form-label" style={{ color: "#000" }}>
-              Email address
-            </label>
+            <label htmlFor="email" className="form-label">Email address</label>
             <input
               type="email"
               className="form-control"
@@ -80,9 +74,7 @@ function SignUpView() {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="password" className="form-label" style={{ color: "#000" }}>
-              Password
-            </label>
+            <label htmlFor="password" className="form-label">Password</label>
             <input
               type="password"
               className="form-control"
@@ -92,18 +84,11 @@ function SignUpView() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <button type="submit" className="btn btn-orange w-100">
-            Sign Up
-          </button>
+          <button type="submit" className="btn btn-orange w-100">Sign Up</button>
         </form>
-        <p className="text-center mt-3" style={{ color: "#000" }}>
+        <p className="text-center mt-3">
           Already have an account?{" "}
-          <span
-            className="text-primary"
-            role="button"
-            style={{ textDecoration: "underline", cursor: "pointer" }}
-            onClick={() => navigate("/sign-in")}
-          >
+          <span className="text-primary" onClick={() => navigate("/sign-in")}>
             Sign In
           </span>
         </p>
