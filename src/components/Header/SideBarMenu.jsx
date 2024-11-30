@@ -3,8 +3,13 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext"; // Import AuthContext
 
 export default function SideBarMenu({ isOpen, toggleSidebar }) {
-  const { user, logout, deleteUserAccount } = useAuth(); // Access user, logout, and deleteAccount from AuthContext
+  const { user, logoutUser, deleteUserAccount } = useAuth(); // Access user, logout, and deleteAccount from AuthContext
   const [hovered, setHovered] = useState(null); // Track hovered button
+
+  const handleLogout = async () => {
+    await logoutUser();
+    toggleSidebar();
+  };
 
   const handleDeleteAccount = async () => {
     if (window.confirm("Are you sure you want to delete your account? This action is irreversible.")) {
@@ -41,10 +46,7 @@ export default function SideBarMenu({ isOpen, toggleSidebar }) {
               <li className="nav-item">
                 <button
                   className="btn nav-link text-white rounded-0 elem-hover"
-                  onClick={() => {
-                    logout();
-                    toggleSidebar();
-                  }}
+                  onClick={handleLogout}
                   onMouseEnter={() => setHovered("logout")}
                   onMouseLeave={() => setHovered(null)}
                   style={{

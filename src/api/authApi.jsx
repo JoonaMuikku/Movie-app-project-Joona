@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3001/api/users';
+const API_BASE_URL = 'http://localhost:5000/api/users';
 
 // Sign Up
 export const signup = async (userData) => {
@@ -11,6 +11,16 @@ export const signup = async (userData) => {
 // Login
 export const login = async (credentials) => {
     const response = await axios.post(`${API_BASE_URL}/login`, credentials);
+    return response.data;
+};
+
+// Logout
+export const logout = async (token) => {
+    const response = await axios.post(`${API_BASE_URL}/logout`,{}, // No body needed
+        {
+            headers: { Authorization: `Bearer ${token}` },
+        }
+    );
     return response.data;
 };
 
