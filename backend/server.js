@@ -6,7 +6,7 @@ import movieRoutes from './routes/movieRoutes.js';
 import pool from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import favoritesRoutes from "./routes/favoritesRoutes.js";
-import reviewRoutes from "./routes/reviewRoutes.js";
+import reviewRoutes from './routes/reviewRoutes.js';
 
 dotenv.config();
 
@@ -23,8 +23,8 @@ app.use('/api/users', userRoutes);
 //Favorites Routes
 app.use("/api/favorites", favoritesRoutes);
 
-//review Routes
-app.use("/api/reviews", reviewRoutes);
+// Review Routes
+app.use('/api/reviews', reviewRoutes);
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
