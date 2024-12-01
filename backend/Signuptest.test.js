@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import { expect, should } from 'chai';
 import axios from 'axios';
 
+
 // Load environment variables from .env.test
 dotenv.config();
 
@@ -16,7 +17,7 @@ describe('API should signup user', () => {
     uniqueEmail = `testuser${Date.now()}@gmail.com`;
   });
 
-  it("should register a user with valid data and get access token", async () => {
+  it("should register a user", async () => {
     try {
       // Step 1: Register a new user
       const signupResponse = await axios.post(`${baseURL}/api/users/signup`, {
@@ -45,8 +46,7 @@ describe('API should signup user', () => {
    
       token = loginResponse.data.token;
 
-      // Step 3: Optionally, perform further actions with the token if needed
-      // For example, you could delete the user account here
+      // Now, delete the user after the test
       const deleteResponse = await axios.delete(`${baseURL}/api/users/delete`, {
         data: { email: uniqueEmail }, // Ensure you send the email in the request body
         headers: {
@@ -171,9 +171,8 @@ describe(' API should not signup user with duplicate email', () => {
                 data: { email }, // Ensure you send the email in the request body
                 headers: {
                   Authorization: `Bearer ${token}`, // Include the token for authorization
-                },
-              });
-
+                },  
+                }) 
       // Check that the response status is 200 OK
       expect(deleteResponse.status).to.equal(200);
       expect(deleteResponse.data).to.have.property('message').that.includes('deleted');
@@ -181,12 +180,11 @@ describe(' API should not signup user with duplicate email', () => {
             } else {
               console.error('Error:', error.message);
               expect.fail(`Request failed: ${error.message}`);
-          }
-        }
-        
+            }
+          };
+        });
       });
-    });
-
+        
 describe(' API should delete user', () => {
 
   let token;
@@ -236,6 +234,95 @@ expect(deleteResponse.data).to.have.property('message').that.includes('deleted')
     }
   }
 
+    });
   });
 
+  //the test requires that you delete the user after the test manually from the database.
+
+  //  sql command (delete from users where user_id >= 0;) to delete all users from the database
+
+
+  describe(' API should sign out user', () => {
+
+    let token;
+
+    it("should sign out a user", async () => {
+
+    const firstName = "Test";
+    const lastName = "User ";
+   const email = `testusersignout@gmail.com`; // Ensure unique email for each test
+    const password = "password123";
+    
+    //create a user to be deleted after
+    await axios.post(`${baseURL}/api/users/signup`, {
+      first_name: firstName,
+      last_name: lastName,
+      email,
+      password,
+  });
+  
+
+  try {
+    // First, log in to get the access token
+    const signinData = await axios.post(`${baseURL}/api/users/login`, {
+      email,
+      password,
+      });
+      //get token from database
+      token = signinData.data.token
+
+      //sign out user
+
+     const response = await axios.post(`${baseURL}/api/users/logout`,{}, // No body needed
+      {
+          headers: { Authorization: `Bearer ${token}` },
+      }
+  );
+  // Check that the response status is 200 OK
+  expect(response.status).to.equal(200);
+  expect(response.data).to.have.property('message').that.includes('logged out');
+
+
+  //sign in user to get token for removing account from database
+  const signinData2 = await axios.post(`${baseURL}/api/users/login`, {
+    email,
+    password,
+    });
+     console.log('SigninData 2:', signinData2.data);
+     console.log('Login response:', signinData2.data); // Log login response
+      
+    expect(loginResponse.status).to.equal(200);
+    expect(loginResponse.data).to.include.all.keys('message', 'user', 'token');
+
+    
+    //get token from database
+    token = signinData2.data.token
+    console.log('Access token received:', token); // Log access token
+
+  //delete user after test
+  const deleteResponse = await axios.delete(`${baseURL}/api/users/delete`, {
+    data: { email }, // Ensure you send the email in the request body
+    headers: {
+      Authorization: `Bearer ${token}`, // Include the token for authorization
+    },
+  });
+
+ // Check that the response status is 200 OK
+ console.log('Delete response:', deleteResponse.data); // Log delete response
+ expect(deleteResponse.status).to.equal(200);
+ expect(deleteResponse.data).to.have.property('message').that.includes('deleted');
+  } catch (error) {
+    // Check that the error status is 404 Not Found
+    if (error.response) {
+      expect(error.response.status).to.equal(404);
+      expect(error.response.data).to.have.property('error').that.includes('User not found');
+    } 
+      // If the request fails, check that the error status is 400 Bad Request¨
+    if (error.response) {
+        expect(error.response.status).to.equal(400);
+        expect(error.response.data).to.have.property('error').that.includes('Token not provided');
+    } 
+  }
+    });
 });
+
