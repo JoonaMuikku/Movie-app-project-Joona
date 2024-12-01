@@ -39,3 +39,9 @@ export const fetchUserReviews = async (token) => {
   });
   return response.data.reviews;
 };
+
+// Fetch all reviews
+export const fetchAllReviews = async () => {
+  const response = await axios.get(`${API_BASE_URL}/`);
+  return response.data.reviews;
+};

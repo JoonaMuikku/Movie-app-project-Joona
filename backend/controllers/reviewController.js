@@ -4,9 +4,16 @@ import { ApiError } from "../helpers/errorClass.js";
 // Add a review
 export const addReview = async (req, res) => {
   const { tmdb_id, review_text, rating } = req.body;
+
+  // Validate inputs
+  if (!tmdb_id || !review_text || typeof rating !== "number" || rating < 1 || rating > 5) {
+    return res.status(400).json({ error: "Invalid input data" });
+  }
+
   const user_id = req.user.user_id; // Ensure user is authenticated
 
   // Check if a review already exists
+  console.log("Checking review for user:", user_id, "and movie:", tmdb_id);
   const query = `SELECT * FROM reviews WHERE user_id = $1 AND tmdb_id = $2;`;
   const result = await pool.query(query, [user_id, tmdb_id]);
 
@@ -123,5 +130,27 @@ export const getUserReviews = async (req, res) => {
   } catch (error) {
     console.error("Error fetching user reviews:", error);
     res.status(500).send("Failed to fetch reviews");
+  }
+};
+
+// Fetch all reviews with movie titles
+export const getAllReviews = async (req, res, next) => {
+  try {
+    const query = `
+      SELECT r.review_id, r.review_text, r.rating, r.created_at, 
+             u.first_name, u.last_name, u.email, 
+             m.title AS movie_title, m.tmdb_id
+      FROM reviews r
+      INNER JOIN users u ON r.user_id = u.user_id
+      INNER JOIN movies m ON r.tmdb_id = m.tmdb_id
+      ORDER BY r.created_at DESC;
+    `;
+
+    const result = await pool.query(query);
+
+    res.status(200).json({ reviews: result.rows });
+  } catch (error) {
+    console.error("Error fetching all reviews:", error.message);
+    next(new ApiError("Failed to fetch all reviews", 500));
   }
 };

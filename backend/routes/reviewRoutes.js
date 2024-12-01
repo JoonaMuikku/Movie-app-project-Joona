@@ -4,6 +4,7 @@ import {
   addReview,
   updateReview,
   deleteReview,
+  getAllReviews,
   getMovieReviews,
   getUserReviews,
 } from '../controllers/reviewController.js';
@@ -18,6 +19,10 @@ router.put('/:id', verifyToken, updateReview);
 
 // Delete a review
 router.delete('/:id', verifyToken, deleteReview);
+
+// Fetch all reviews with movie titles
+router.get('/', getAllReviews);
+
 
 // Get reviews for a specific movie
 router.get('/:id', getMovieReviews);
