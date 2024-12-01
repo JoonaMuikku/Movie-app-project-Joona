@@ -12,6 +12,9 @@
   padding: 6rem 2rem 2rem 6rem;
 }
 
+.App{
+  min-height: 100vh;
+}
 /* TODO: make carousel design RESPONSIVE */
 
 .carousel-control-prev {
