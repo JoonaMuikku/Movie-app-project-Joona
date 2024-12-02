@@ -288,8 +288,8 @@ expect(deleteResponse.data).to.have.property('message').that.includes('deleted')
     email,
     password,
     });
-     console.log('SigninData 2:', signinData2.data);
-     console.log('Login response:', signinData2.data); // Log login response
+     //console.log('SigninData 2:', signinData2.data);
+     //console.log('Login response:', signinData2.data); // Log login response
       
     expect(loginResponse.status).to.equal(200);
     expect(loginResponse.data).to.include.all.keys('message', 'user', 'token');
@@ -297,7 +297,7 @@ expect(deleteResponse.data).to.have.property('message').that.includes('deleted')
     
     //get token from database
     token = signinData2.data.token
-    console.log('Access token received:', token); // Log access token
+    //console.log('Access token received:', token); // Log access token
 
   //delete user after test
   const deleteResponse = await axios.delete(`${baseURL}/api/users/delete`, {
@@ -308,7 +308,7 @@ expect(deleteResponse.data).to.have.property('message').that.includes('deleted')
   });
 
  // Check that the response status is 200 OK
- console.log('Delete response:', deleteResponse.data); // Log delete response
+ //console.log('Delete response:', deleteResponse.data); // Log delete response
  expect(deleteResponse.status).to.equal(200);
  expect(deleteResponse.data).to.have.property('message').that.includes('deleted');
   } catch (error) {
@@ -325,4 +325,112 @@ expect(deleteResponse.data).to.have.property('message').that.includes('deleted')
   }
     });
 });
+
+describe('API should have user post review', () => {
+  let token;
+
+  it("should post a review", async () => {
+    // sign up user for reviews
+    const firstName = "Test";
+    const lastName = "User  ";
+    const email = `testusereviews@gmail.com`; // Ensure unique email for each test
+    const password = "password123";
+
+    // Step 1: Sign up the user
+    await axios.post(`${baseURL}/api/users/signup`, {
+      first_name: firstName,
+      last_name: lastName,
+      email,
+      password,
+    });
+
+    // Step 2: Sign in the user to get the token
+    const signinData = await axios.post(`${baseURL}/api/users/login`, {
+      email,
+      password,
+    });
+
+    // Get token from login response
+    token = signinData.data.token;
+
+    // Step 3: Post the review
+    try {
+      const reviewResponse = await axios.post(`${baseURL}/api/reviews/add`, {
+        tmdb_id: 1, // Make sure this ID is valid
+        review_text: "Great movie",
+        rating: 5,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token for authorization
+        },
+      });
+
+      // Log the actual response for debugging
+      console.log('Review Response:', reviewResponse.data);
+
+      // Check that the response status is 201 Created (or appropriate status)
+      expect(reviewResponse.status).to.equal(201);
+      
+      // Update the expectations based on the actual response structure
+      // Assuming the response only contains the review object
+      expect(reviewResponse.data).to.have.property('review'); // Check for review key
+      // If you need to check for specific properties in the review
+      expect(reviewResponse.data.review).to.include.all.keys('review_id', 'tmdb_id', 'review_text', 'rating'); // Adjust as needed
+    } catch (error) {
+      // Log the error response for debugging
+      console.error('Error posting review:', error.response);
+      throw error; // Re-throw the error to fail the test
+    }
+  });
+});
+
+describe('API should have user update review', () => {
+  let token;
+  let reviewId;
+
+  it("should update a review", async () => {
+    const email = `testusereviews@gmail.com`; // Ensure unique email for each test
+    const password = "password123";
+
+    // Sign in the user to get the token
+    const signinData = await axios.post(`${baseURL}/api/users/login`, {
+      email,
+      password,
+    });
+
+    // Get token from login response
+    token = signinData.data.token;
+
+    // Step 3: Post a review to update later
+    const reviewResponse = await axios.post(`${baseURL}/api/reviews/add`, {
+      tmdb_id: 1, // Ensure this ID is valid
+      review_text: "Great movie",
+      rating: 5,
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Include the token for authorization
+      },
+    });
+
+    // Get the review ID from the response
+    reviewId = reviewResponse.data.review.review_id;
+
+    // Step 4: Update the review
+    const updateResponse = await axios.put(`${baseURL}/api/reviews/${reviewId}`, {
+      review_text: "Updated review text",
+      rating: 4,
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Include the token for authorization
+      },
+    });
+
+    // Check that the response status is 200 OK
+    expect(updateResponse.status).to.equal(200);
+    expect(updateResponse.data).to.have.property('review'); // Check for review key
+    expect(updateResponse.data.review).to.include.all.keys('review_id', 'review_text', 'rating'); // Adjust as needed
+  });
+});
+
+
 
