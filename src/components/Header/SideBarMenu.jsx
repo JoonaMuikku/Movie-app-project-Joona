@@ -109,6 +109,12 @@ export default function SideBarMenu({ isOpen, toggleSidebar }) {
 
           {/* Common links */}
           <li className="nav-item mb-2">
+            <Link to="/reviews" className="nav-link text-white" onClick={toggleSidebar}>
+              <i className="bi bi-list-stars me-2"></i> Browse Reviews
+            </Link>
+          </li>
+
+          <li className="nav-item mb-2">
             <Link
               to="movies"
               className="nav-link d-block text-white rounded-0 elem-hover"

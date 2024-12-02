@@ -21,7 +21,7 @@ router.put('/:id', verifyToken, updateReview);
 router.delete('/:id', verifyToken, deleteReview);
 
 // Fetch all reviews with movie titles
-router.get('/', getAllReviews);
+router.get('/all', getAllReviews);
 
 
 // Get reviews for a specific movie

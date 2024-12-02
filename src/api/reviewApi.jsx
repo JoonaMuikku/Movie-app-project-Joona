@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:3001/api/reviews";
+const API_BASE_URL = "http://localhost:5000/api/reviews";
 
 // Add a review
 export const addReview = async (reviewData, token) => {
@@ -42,6 +42,6 @@ export const fetchUserReviews = async (token) => {
 
 // Fetch all reviews
 export const fetchAllReviews = async () => {
-  const response = await axios.get(`${API_BASE_URL}/`);
+  const response = await axios.get(`${API_BASE_URL}/all`);
   return response.data.reviews;
 };

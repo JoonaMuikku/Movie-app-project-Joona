@@ -13,6 +13,7 @@ import MoviesView from './views/MoviesView';
 import GroupsView from './views/GroupsView';
 import MovieDetails from './views/MovieDetailsView/MovieDetails';
 import SearchView from './views/SearchView';
+import ReviewsList from "./views/ReviewList/ReviewsList";
 
 
 export default function App() {
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/movie/:id" element={<MovieDetails />} />
           <Route path="/search" element={<SearchView />} />
           <Route path="/search/:query" element={<SearchView />} />
+          <Route path="/reviews" element={<ReviewsList />} />
         </Routes>
         <Footer />
       </Router>

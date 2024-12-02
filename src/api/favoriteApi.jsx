@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:3001/api/favorites";
+const API_BASE_URL = "http://localhost:5000/api/favorites";
 
 // Fetch all favorites
 export const fetchFavorites = async (token) => {
