@@ -7,6 +7,8 @@ import pool from './config/db.js';
 import userRoutes from './routes/userRoutes.js';
 import favoritesRoutes from "./routes/favoritesRoutes.js";
 import reviewRoutes from './routes/reviewRoutes.js';
+import groupRoutes from './routes/groupRoutes.js';
+
 
 dotenv.config();
 
@@ -19,6 +21,9 @@ app.use('/api', movieRoutes);
 
 // User Routes
 app.use('/api/users', userRoutes);
+
+// Group Routes
+app.use('/api/groups', groupRoutes);
 
 //Favorites Routes
 app.use("/api/favorites", favoritesRoutes);
