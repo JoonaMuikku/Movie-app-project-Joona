@@ -13,6 +13,7 @@ import MoviesView from './views/MoviesView';
 import GroupsView from './views/GroupsView';
 import MovieDetails from './views/MovieDetailsView/MovieDetails';
 import SearchView from './views/SearchView';
+import ReviewsList from "./views/ReviewList/ReviewsList";
 import GroupDetails from './views/GroupDetailsView.jsx'
 import PrivateRoute from './routes/PrivateRoute.jsx';
 import GroupAdminView from './views/GroupAdminView';
@@ -35,6 +36,7 @@ export default function App() {
           <Route path="/groups/:id/admin" element={<PrivateRoute><GroupAdminView /></PrivateRoute>} />
           <Route path="/search" element={<SearchView />} />
           <Route path="/search/:query" element={<SearchView />} />
+          <Route path="/reviews" element={<ReviewsList />} />
         </Routes>
         <Footer />
       </Router>
