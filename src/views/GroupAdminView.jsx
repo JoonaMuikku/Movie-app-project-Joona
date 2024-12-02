@@ -18,7 +18,7 @@ export default function GroupAdminView() {
     const fetchGroupDetails = async () => {
         try {
             const response = await axios.get(
-                `http://localhost:3001/api/groups/${id}`,
+                `http://localhost:5000/api/groups/${id}`,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             
@@ -40,7 +40,7 @@ export default function GroupAdminView() {
         if (!window.confirm('Are you sure you want to remove this member?')) return;
         try {
             await axios.delete(
-                `http://localhost:3001/api/groups/${id}/members/${memberId}`,
+                `http://localhost:5000/api/groups/${id}/members/${memberId}`,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             toast.success('Member removed successfully');
@@ -54,7 +54,7 @@ export default function GroupAdminView() {
         if (!window.confirm('Are you sure you want to delete this group?')) return;
         try {
             await axios.delete(
-                `http://localhost:3001/api/groups/${id}`,
+                `http://localhost:5000/api/groups/${id}`,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             toast.success('Group deleted successfully');
