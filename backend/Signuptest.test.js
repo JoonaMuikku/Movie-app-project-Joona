@@ -244,7 +244,8 @@ expect(deleteResponse.data).to.have.property('message').that.includes('deleted')
 
   describe(' API should sign out user', () => {
 
-    let token;
+    let token1;
+    let token2;
 
     it("should sign out a user", async () => {
 
@@ -269,7 +270,7 @@ expect(deleteResponse.data).to.have.property('message').that.includes('deleted')
       password,
       });
       //get token from database
-      token = signinData.data.token
+      token1 = signinData.data.token
 
       //sign out user
 
@@ -288,16 +289,16 @@ expect(deleteResponse.data).to.have.property('message').that.includes('deleted')
     email,
     password,
     });
-     console.log('SigninData 2:', signinData2.data);
-     console.log('Login response:', signinData2.data); // Log login response
+     //console.log('SigninData 2:', signinData2.data);
+     //console.log('Login response:', signinData2.data); // Log login response
       
     expect(loginResponse.status).to.equal(200);
     expect(loginResponse.data).to.include.all.keys('message', 'user', 'token');
 
     
     //get token from database
-    token = signinData2.data.token
-    console.log('Access token received:', token); // Log access token
+    token2 = signinData2.data.token
+    //console.log('Access token received:', token); // Log access token
 
   //delete user after test
   const deleteResponse = await axios.delete(`${baseURL}/api/users/delete`, {
@@ -308,7 +309,7 @@ expect(deleteResponse.data).to.have.property('message').that.includes('deleted')
   });
 
  // Check that the response status is 200 OK
- console.log('Delete response:', deleteResponse.data); // Log delete response
+ //console.log('Delete response:', deleteResponse.data); // Log delete response
  expect(deleteResponse.status).to.equal(200);
  expect(deleteResponse.data).to.have.property('message').that.includes('deleted');
   } catch (error) {
@@ -324,5 +325,115 @@ expect(deleteResponse.data).to.have.property('message').that.includes('deleted')
     } 
   }
     });
+});
+
+
+describe('API should handle user review operations', () => {
+  let token;
+  let reviewId;
+  const email = `testuserreviews@example.com`; // Ensure unique email
+
+  before(async () => {
+      // Step 1: Sign up the user
+      const signupResponse = await axios.post(`${baseURL}/api/users/signup`, {
+          first_name: "Test",
+          last_name: "User  ",
+          email: email,
+          password: "password123",
+      });
+      token = signupResponse.data.token;
+      expect(signupResponse.status).to.equal(201);
+      expect(signupResponse.data).to.include.all.keys('message', 'user', 'token');
+  });
+
+  // after(async () => {
+  //     // Cleanup: Delete the test user after all tests
+  //     if (token) {
+  //         await axios.delete(`${baseURL}/api/users/delete`, {
+  //             headers: {
+  //                 Authorization: `Bearer ${token}`,
+  //             },
+  //         });
+  //     }
+  // });
+
+  it("should create a review", async () => {
+      const reviewResponse = await axios.post(`${baseURL}/api/reviews/add`, {
+          tmdb_id: 1, // Ensure this ID is valid
+          review_text: "Great movie",
+          rating: 5,
+      }, {
+          headers: {
+              Authorization: `Bearer ${token}`,
+          },
+      });
+      reviewId = reviewResponse.data.review.review_id; // Store review ID for later use
+      expect(reviewResponse.status).to.equal(201);
+      expect(reviewResponse.data).to.have.property('review');
+  });
+
+  it("should update the review", async () => {
+      const updatedReviewResponse = await axios.put(`${baseURL}/api/reviews/${reviewId}`, {
+          review_text: "Updated review text",
+          rating: 4,
+      }, {
+          headers: {
+              Authorization: `Bearer ${token}`,
+          },
+      });
+      expect(updatedReviewResponse.status).to.equal(200);
+      expect(updatedReviewResponse.data).to.have.property('review');
+      expect(updatedReviewResponse.data.review.review_text).to.equal("Updated review text");
+      expect(Number(updatedReviewResponse.data.review.rating)).to.equal(4);
+      //console.log('Updated review:', updatedReviewResponse.data.review);
+  });
+
+  it("should delete the review", async () => {
+    try {
+        //console.log(`Attempting to delete review with ID: ${reviewId}`); // Log the review ID
+
+        const deleteResponse = await axios.delete(`${baseURL}/api/reviews/${reviewId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        expect(deleteResponse.status).to.equal(200);
+        expect(deleteResponse.data).to.have.property('message').that.includes('deleted');
+
+        // Adding a small delay before fetching the review
+        await new Promise(resolve => setTimeout(resolve, 100)); // 100ms delay
+
+        // Verify that the review has been deleted
+        const fetchResponse = await axios.get(`${baseURL}/api/reviews/${reviewId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        // Check if the response indicates that there are no reviews
+        expect(fetchResponse.data.reviews).to.be.an('array').that.is.empty; // Expecting an empty array
+
+    } catch (error) {
+        // Log the entire error object for debugging
+        console.error('Error during delete operation:', error);
+        if (error.response) {
+            console.error('Error response data:', error.response.data);
+            throw error; // Re-throw the error to fail the test
+        } else {
+            throw new Error('An unexpected error occurred: ' + error.message);
+        }
+    }
+});
+after(async () => {
+  // Clean up: Delete the test user after the test
+  const deleteResponse = await axios.delete(`${baseURL}/api/users/delete`, {
+       email: email,
+      headers: {
+          Authorization: `Bearer ${token}`,
+      },  
+  });
+  expect(deleteResponse.status).to.equal(200);
+  });
 });
 
