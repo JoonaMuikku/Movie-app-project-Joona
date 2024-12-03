@@ -6,6 +6,8 @@ drop table if exists group_users cascade;
 drop table if exists movies cascade;
 drop table if exists favorites cascade;
 drop table if exists reviews cascade;
+drop table if exists group_join_requests cascade;
+drop table if exists group_movies cascade;
 
 
 -- Users Table
@@ -31,6 +33,15 @@ CREATE TABLE group_users (
    joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
    PRIMARY KEY (group_id, user_id)
 );
+-- Group Join Requests Table
+CREATE TABLE group_join_requests (
+    request_id SERIAL PRIMARY KEY,
+    group_id INTEGER REFERENCES groups(group_id) ON DELETE CASCADE,
+    user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+    status VARCHAR(20) DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(group_id, user_id)
+);
 
 -- Movies Table
 CREATE TABLE movies (
@@ -44,6 +55,14 @@ CREATE TABLE movies (
    poster_url TEXT,                        -- URL for movie poster
    last_updated TIMESTAMP DEFAULT NOW(),   -- Last cache update
    created_at TIMESTAMP DEFAULT NOW()      -- When the movie was first cached
+);
+-- Group Movies Table
+CREATE TABLE group_movies (
+    group_movie_id SERIAL PRIMARY KEY,
+    group_id INTEGER REFERENCES groups(group_id) ON DELETE CASCADE,
+    tmdb_id INTEGER NOT NULL,
+    added_by INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Favorites Table 
