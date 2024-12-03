@@ -78,6 +78,7 @@ CREATE TABLE reviews (
    review_id SERIAL PRIMARY KEY,                -- Unique identifier for each review
     user_id INT REFERENCES users(user_id) ON DELETE CASCADE,-- Foreign key to the users table Cascade delete reviews if user is deleted
     tmdb_id INT NOT NULL,                        -- TMDB movie ID
+    ALTER TABLE reviews ADD COLUMN movie_title VARCHAR(255);
     review_text TEXT NOT NULL,                   -- The actual review text
     rating NUMERIC(3, 1) NOT NULL,               -- Rating with one decimal place
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Review creation timestamp

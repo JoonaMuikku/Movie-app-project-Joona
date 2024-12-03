@@ -3,39 +3,41 @@ import { ApiError } from "../helpers/errorClass.js";
 
 // Add a review
 export const addReview = async (req, res) => {
-  const { tmdb_id, review_text, rating } = req.body;
+  const { tmdb_id, movie_title, review_text, rating } = req.body;
 
   // Validate inputs
-  if (!tmdb_id || !review_text || typeof rating !== "number" || rating < 1 || rating > 5) {
+  if (!tmdb_id || !movie_title || !review_text || typeof rating !== "number" || rating < 1 || rating > 5) {
     return res.status(400).json({ error: "Invalid input data" });
   }
 
   const user_id = req.user.user_id; // Ensure user is authenticated
 
-  // Check if a review already exists
-  console.log("Checking review for user:", user_id, "and movie:", tmdb_id);
-  const query = `SELECT * FROM reviews WHERE user_id = $1 AND tmdb_id = $2;`;
-  const result = await pool.query(query, [user_id, tmdb_id]);
-
-  if (result.rowCount > 0) {
-    return res.status(400).json({
-      message: "You have already reviewed this movie. Please update your review instead.",
-    });
-  }
-
   try {
-    const query = `
-            INSERT INTO reviews (user_id, tmdb_id, review_text, rating)
-            VALUES ($1, $2, $3, $4)
-            RETURNING *;
-        `;
-    const result = await pool.query(query, [user_id, tmdb_id, review_text, rating]);
+    // Check if a review already exists
+    const reviewQuery = `SELECT * FROM reviews WHERE user_id = $1 AND tmdb_id = $2;`;
+    const reviewResult = await pool.query(reviewQuery, [user_id, tmdb_id]);
+
+    if (reviewResult.rowCount > 0) {
+      return res.status(400).json({
+        message: "You have already reviewed this movie. Please update your review instead.",
+      });
+    }
+
+    // Insert the review with `movie_title`
+    const insertReviewQuery = `
+      INSERT INTO reviews (user_id, tmdb_id, movie_title, review_text, rating)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING *;
+    `;
+    const result = await pool.query(insertReviewQuery, [user_id, tmdb_id, movie_title, review_text, rating]);
+
     res.status(201).json({ review: result.rows[0] });
   } catch (error) {
     console.error("Error adding review:", error);
     res.status(500).send("Failed to add review");
   }
 };
+
 
 // Update a review
 export const updateReview = async (req, res, next) => {
@@ -136,17 +138,25 @@ export const getUserReviews = async (req, res) => {
 // Fetch all reviews with movie titles
 export const getAllReviews = async (req, res, next) => {
   try {
-    const query = `
-      SELECT r.review_id, r.review_text, r.rating, r.created_at, 
-             u.first_name, u.last_name, u.email, 
-             m.title AS movie_title, m.tmdb_id
+    const { title } = req.query; // Retrieve search query from the request
+
+    let query = `
+      SELECT r.review_id,r.tmdb_id, r.review_text, r.rating, r.movie_title, r.created_at,
+             u.first_name, u.last_name, u.email
       FROM reviews r
       INNER JOIN users u ON r.user_id = u.user_id
-      INNER JOIN movies m ON r.tmdb_id = m.tmdb_id
-      ORDER BY r.created_at DESC;
     `;
 
-    const result = await pool.query(query);
+    const values = [];
+
+    if (title) {
+      query += ` WHERE LOWER(r.movie_title) LIKE LOWER($1) `;
+      values.push(`%${title}%`);
+    }
+
+    query += ` ORDER BY r.created_at DESC;`;
+
+    const result = await pool.query(query, values);
 
     res.status(200).json({ reviews: result.rows });
   } catch (error) {
@@ -154,3 +164,5 @@ export const getAllReviews = async (req, res, next) => {
     next(new ApiError("Failed to fetch all reviews", 500));
   }
 };
+
+

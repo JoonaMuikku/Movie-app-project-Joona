@@ -43,7 +43,7 @@ export default function MovieDetails() {
 
   const handleSubmitReview = async () => {
     try {
-      await addReview({ tmdb_id: id, review_text: reviewText, rating }, token);
+      await addReview({ tmdb_id: id, movie_title: movie.title, review_text: reviewText, rating }, token);
       toast.success("Review added!");
   
       // Refresh reviews
