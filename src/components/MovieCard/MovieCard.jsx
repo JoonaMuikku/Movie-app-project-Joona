@@ -22,19 +22,22 @@ export const MovieCard = ({ movie }) => {
 
   // Fetch initial favorite status (optional for performance)
   useEffect(() => {
+    if (!user || !token) {
+      setIsFavorited(false); // Reset favorite status if user logs out
+      return;
+    }
     const checkFavoriteStatus = async () => {
-      if (!user || !token) return;
       try {
         const favorites = await fetchFavorites(token);
-        const isFavorited = favorites.some((fav) => fav.tmdb_id === movie.id);
-        setIsFavorited(isFavorited);
+        setIsFavorited(favorites.some((fav) => fav.tmdb_id === movie.id));
       } catch (error) {
         console.error("Failed to fetch favorites", error.message);
       }
     };
-
+  
     checkFavoriteStatus();
-  }, [movie.id, token, user]);
+  }, [user, token, movie.id]);
+  
 
   // Toggle favorite status
   const toggleFavorite = async (e) => {

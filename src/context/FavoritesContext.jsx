@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
-import { fetchFavorites, addFavorite, removeFavorite } from "../api/favoriteApi"
+import { fetchFavorites, addFavorite, removeFavorite } from "../api/favoriteApi";
 import { useAuth } from "./AuthContext";
 
 const FavoritesContext = createContext();
@@ -11,7 +11,10 @@ export const FavoritesProvider = ({ children }) => {
   // Fetch all favorites when the user logs in or the token changes
   useEffect(() => {
     const loadFavorites = async () => {
-      if (!user || !token) return;
+      if (!user || !token) {
+        setFavorites([]); // Clear favorites if the user logs out
+        return;
+      }
       try {
         const userFavorites = await fetchFavorites(token);
         setFavorites(userFavorites);
@@ -21,7 +24,7 @@ export const FavoritesProvider = ({ children }) => {
     };
 
     loadFavorites();
-  }, [token, user]);
+  }, [token, user]); // Listen for changes in user and token
 
   // Add a movie to favorites
   const addToFavorites = async (tmdb_id) => {

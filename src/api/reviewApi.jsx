@@ -41,7 +41,9 @@ export const fetchUserReviews = async (token) => {
 };
 
 // Fetch all reviews
-export const fetchAllReviews = async () => {
-  const response = await axios.get(`${API_BASE_URL}/all`);
+export const fetchAllReviews = async (title) => {
+  const response = await axios.get(`${API_BASE_URL}/all`, {
+    params: { title },
+  });
   return response.data.reviews;
 };
