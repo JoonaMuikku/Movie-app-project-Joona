@@ -30,8 +30,10 @@ export default function GroupDetailsView() {
     }, [id, user, token, group?.owner_id]);
 
     const fetchGroupDetails = async () => {
-        try {
-            const response = await axios.get(`http://localhost:5000/api/groups/${id}`, {
+        try {   
+            const response = await axios.get(
+                //'http://localhost:3001/api/groups/${id}'
+                `http://localhost:3001/api/groups/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const groupData = response.data.group;
@@ -54,7 +56,8 @@ export default function GroupDetailsView() {
         
         try {
             const response = await axios.get(
-                `http://localhost:5000/api/groups/${id}/requests`,
+                //'http://localhost:3001/api/groups/${id}'
+                `http://localhost:3001/api/groups/${id}/requests`,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             setJoinRequests(response.data.requests);
@@ -66,7 +69,8 @@ export default function GroupDetailsView() {
     const fetchGroupMovies = async () => {
         try {
             const response = await axios.get(
-                `http://localhost:5000/api/groups/${id}/movies`,
+                //'http://localhost:3001/api/groups/${id}'
+                `http://localhost:3001/api/groups/${id}/movies`,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             const moviesWithDetails = await Promise.all(
@@ -85,7 +89,9 @@ export default function GroupDetailsView() {
         if (!window.confirm('Are you sure you want to delete this group?')) return;
 
         try {
-            await axios.delete(`http://localhost:5000/api/groups/${id}`, {
+            await axios.delete(
+                //'http://localhost:3001/api/groups/${id}'
+                `http://localhost:3001/api/groups/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             toast.success('Group deleted successfully');
@@ -98,7 +104,8 @@ export default function GroupDetailsView() {
     const handleJoinRequest = async () => {
         try {
             await axios.post(
-                `http://localhost:5000/api/groups/${id}/join`,
+                //'http://localhost:3001/api/groups/${id}'
+                `http://localhost:3001/api/groups/${id}/join`,
                 {},
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -112,7 +119,8 @@ export default function GroupDetailsView() {
     const handleRequestResponse = async (requestId, action) => {
         try {
             await axios.post(
-                `http://localhost:5000/api/groups/requests/${requestId}`,
+                //'http://localhost:3001/api/groups/${id}'
+                `http://localhost:3001/api/groups/requests/${requestId}`,
                 { action },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -129,7 +137,8 @@ export default function GroupDetailsView() {
 
         try {
             await axios.delete(
-                `http://localhost:5000/api/groups/${id}/leave`,
+                //'http://localhost:3001/api/groups/${id}'
+                `http://localhost:3001/api/groups/${id}/leave`,
                 { 
                     headers: { Authorization: `Bearer ${token}` }
                 }
@@ -146,7 +155,8 @@ export default function GroupDetailsView() {
         e.preventDefault();
         try {
             await axios.post(
-                `http://localhost:5000/api/groups/${id}/movies`,
+                //'http://localhost:3001/api/groups/${id}'
+                `http://localhost:3001/api/groups/${id}/movies`,
                 { tmdb_id: movieId },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -164,7 +174,8 @@ export default function GroupDetailsView() {
         
         try {
             await axios.delete(
-                `http://localhost:5000/api/groups/${id}/movies/${movieId}`,
+                //'http://localhost:3001/api/groups/${id}'
+                `http://localhost:3001/api/groups/${id}/movies/${movieId}`,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             toast.success("Movie removed successfully");

@@ -17,7 +17,9 @@ export default function GroupsView() {
 
     const fetchGroups = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/api/groups');
+            const response = await axios.get(
+                //'http://localhost:3001/api/groups/${id}'
+                'http://localhost:3001/api/groups');
             setGroups(response.data.groups);
         } catch (error) {
             console.error('Error fetching groups:', error);
@@ -34,7 +36,8 @@ export default function GroupsView() {
 
         try {
             await axios.post(
-                'http://localhost:5000/api/groups/create',
+                //'http://localhost:3001/api/groups/${id}'
+                'http://localhost:3001/api/groups/create',
                 { group_name: newGroupName },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -49,7 +52,9 @@ export default function GroupsView() {
 
     const handleDeleteGroup = async (groupId) => {
         try {
-            await axios.delete(`http://localhost:5000/api/groups/${groupId}`, {
+            await axios.delete(
+                //'http://localhost:3001/api/groups/${id}'
+                `http://localhost:3001/api/groups/${groupId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             toast.success('Group deleted successfully');
