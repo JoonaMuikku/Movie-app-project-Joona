@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
@@ -19,79 +19,78 @@ export default function GroupDetailsView() {
     const [showAddMovieModal, setShowAddMovieModal] = useState(false);
     const [movieId, setMovieId] = useState("");
 
-    useEffect(() => {
-        if (user && token) {
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+        const fetchGroupDetails = useCallback(async () => {
+            try {
+                const response = await axios.get(
+                    `${API_BASE_URL}/groups/${id}`,
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+                const groupData = response.data.group;
+                setGroup(groupData);
+                setIsMember(groupData.is_member);
+                setIsRequested(groupData.has_pending_request);
+                setLoading(false);
+            } catch (error) {
+                if (error.response?.status === 403) {
+                    setError("You don't have access to this group");
+                } else {
+                    setError("Failed to fetch group details");
+                }
+                setLoading(false);
+            }
+        }, [id, token, API_BASE_URL]);
+
+        const fetchPendingRequests = useCallback(async () => {
+            if (!user || user.user_id !== group?.owner_id) return;
+    
+            try {
+                const response = await axios.get(
+                    `${API_BASE_URL}/groups/${id}/requests`,
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+                setJoinRequests(response.data.requests);
+            } catch (error) {
+                console.error('Failed to fetch pending requests:', error);
+            }
+        }, [id, token, user, group?.owner_id, API_BASE_URL]);
+
+        const fetchGroupMovies = useCallback(async () => {
+            try {
+                const response = await axios.get(
+                    `${API_BASE_URL}/groups/${id}/movies`,
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+                const moviesWithDetails = await Promise.all(
+                    response.data.movies.map(async (groupMovie) => {
+                        const movieDetails = await fetchMovieDetails(groupMovie.tmdb_id);
+                        return { ...groupMovie, details: movieDetails.movie };
+                    })
+                );
+                setGroupMovies(moviesWithDetails);
+            } catch (error) {
+                console.error("Error fetching group movies:", error);
+            }
+        }, [id, token, API_BASE_URL])
+
+    
+        useEffect(() => {
             fetchGroupDetails();
             fetchGroupMovies();
-            if (group && user.user_id === group.owner_id) {
+            if (user?.user_id === group?.owner_id) {
                 fetchPendingRequests();
             }
-        }
-    }, [id, user, token, group?.owner_id]);
+        }, [fetchGroupDetails, fetchGroupMovies, fetchPendingRequests, user?.user_id, group?.owner_id]);
 
-    const fetchGroupDetails = async () => {
-        try {   
-            const response = await axios.get(
-                //'http://localhost:3001/api/groups/${id}'
-                `http://localhost:3001/api/groups/${id}`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            const groupData = response.data.group;
-            setGroup(groupData);
-            setIsMember(groupData.is_member);
-            setIsRequested(groupData.has_pending_request);
-            setLoading(false);
-        } catch (error) {
-            if (error.response?.status === 403) {
-                setError("You don't have access to this group");
-            } else {
-                setError("Failed to fetch group details");
-            }
-            setLoading(false);
-        }
-    };
-
-    const fetchPendingRequests = async () => {
-        if (!user || user.user_id !== group?.owner_id) return;
-        
-        try {
-            const response = await axios.get(
-                //'http://localhost:3001/api/groups/${id}'
-                `http://localhost:3001/api/groups/${id}/requests`,
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
-            setJoinRequests(response.data.requests);
-        } catch (error) {
-            console.error('Failed to fetch pending requests:', error);
-        }
-    };
-
-    const fetchGroupMovies = async () => {
-        try {
-            const response = await axios.get(
-                //'http://localhost:3001/api/groups/${id}'
-                `http://localhost:3001/api/groups/${id}/movies`,
-                { headers: { Authorization: `Bearer ${token}` } }
-            );
-            const moviesWithDetails = await Promise.all(
-                response.data.movies.map(async (groupMovie) => {
-                    const movieDetails = await fetchMovieDetails(groupMovie.tmdb_id);
-                    return { ...groupMovie, details: movieDetails.movie };
-                })
-            );
-            setGroupMovies(moviesWithDetails);
-        } catch (error) {
-            console.error("Error fetching group movies:", error);
-        }
-    };
-
-    const handleDeleteGroup = async () => {
+        // Bring this to use if needed
+    /*const handleDeleteGroup = async () => {
         if (!window.confirm('Are you sure you want to delete this group?')) return;
 
         try {
             await axios.delete(
                 //'http://localhost:3001/api/groups/${id}'
-                `http://localhost:3001/api/groups/${id}`, {
+                `${API_BASE_URL}/groups/${id}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             toast.success('Group deleted successfully');
@@ -99,13 +98,12 @@ export default function GroupDetailsView() {
         } catch (error) {
             toast.error('Failed to delete group');
         }
-    };
+    };*/
 
     const handleJoinRequest = async () => {
         try {
             await axios.post(
-                //'http://localhost:3001/api/groups/${id}'
-                `http://localhost:3001/api/groups/${id}/join`,
+                `${API_BASE_URL}/groups/${id}/join`,
                 {},
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -119,8 +117,7 @@ export default function GroupDetailsView() {
     const handleRequestResponse = async (requestId, action) => {
         try {
             await axios.post(
-                //'http://localhost:3001/api/groups/${id}'
-                `http://localhost:3001/api/groups/requests/${requestId}`,
+                `${API_BASE_URL}/groups/requests/${requestId}`,
                 { action },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -137,8 +134,7 @@ export default function GroupDetailsView() {
 
         try {
             await axios.delete(
-                //'http://localhost:3001/api/groups/${id}'
-                `http://localhost:3001/api/groups/${id}/leave`,
+                `${API_BASE_URL}/groups/${id}/leave`,
                 { 
                     headers: { Authorization: `Bearer ${token}` }
                 }
@@ -155,8 +151,7 @@ export default function GroupDetailsView() {
         e.preventDefault();
         try {
             await axios.post(
-                //'http://localhost:3001/api/groups/${id}'
-                `http://localhost:3001/api/groups/${id}/movies`,
+                `${API_BASE_URL}/groups/${id}/movies`,
                 { tmdb_id: movieId },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -174,8 +169,7 @@ export default function GroupDetailsView() {
         
         try {
             await axios.delete(
-                //'http://localhost:3001/api/groups/${id}'
-                `http://localhost:3001/api/groups/${id}/movies/${movieId}`,
+                `${API_BASE_URL}/groups/${id}/movies/${movieId}`,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             toast.success("Movie removed successfully");
