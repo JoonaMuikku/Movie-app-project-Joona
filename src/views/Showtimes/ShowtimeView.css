@@ -1,0 +1,77 @@
+ Custom Styles for Showtimes /
+.showtimes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Adds space between each showtime card */
+  width: 100%; /* Ensures it takes up full width of the container */
+  background-color: #333; /* Dark gray background */
+  color: #fff; /* White text color for better contrast on dark background */
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.showtime-card {
+  background-color: #444; /* Slightly lighter dark gray */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Makes each card take up the full width */
+  padding: 20px;
+  display: flex;
+  flex-direction: column; /* Changed to column direction to stack items */
+  gap: 15px; /* Space between content */
+}
+
+.showtime-content {
+  display: flex;
+  flex-direction: row; /* Keep image and text in a row */
+  gap: 20px; /* Space between image and text */
+}
+
+.showtime-image {
+  flex-shrink: 0; /* Prevent the image from shrinking */
+}
+
+.showtime-image img {
+  border-radius: 5px;
+  width: 150px; /* Fixed size for the image */
+  height: 225px; /* Fixed height to keep the aspect ratio */
+  object-fit: cover; /* Ensures the image fits well */
+}
+
+.showtime-info {
+  flex-grow: 1; /* Allow the info to take the remaining space */
+}
+
+.showtime-title {
+  font-size: 1.5rem; /* Larger title font size */
+  font-weight: bold;
+  color: #fff; /* White title for contrast */
+  margin-bottom: 10px; /* Space between title and other info */
+}
+
+.showtime-info p {
+  font-size: 1rem;
+  color: #ddd;
+}
+
+.showtime-info strong {
+  color: #fff;
+}
+
+.showtime-card:hover {
+  transform: translateY(-5px); /* Card hover effect */
+}
+
+@media (max-width: 768px) {
+  .showtime-card {
+    padding: 15px;
+  }
+
+  .showtime-image img {
+    max-width: 120px;
+  }
+
+  .showtime-title {
+    font-size: 1.3rem;
+  }
+}

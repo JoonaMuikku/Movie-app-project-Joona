@@ -124,13 +124,27 @@ export default function SideBarMenu({ isOpen, toggleSidebar }) {
             </Link>
           </li>
           <li className="nav-item">
-            <Link
+           
+           <Link
               to="groups"
               className="nav-link text-white rounded-0 elem-hover"
               onClick={toggleSidebar}
             >
               <i className="bi bi-people me-2"></i> Groups
             </Link>
+
+            <li className="nav-item mb-2">
+            <Link
+              to="showtimes" // New Showtimes Link
+              className="nav-link text-white rounded-0 elem-hover"
+              onClick={toggleSidebar}
+            >
+              <i className="bi bi-calendar-event me-2"></i>
+              Showtimes
+            </Link>
+          </li>
+
+
           </li>
         </ul>
       </div>
