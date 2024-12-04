@@ -25,7 +25,9 @@ export default function App() {
 
     <div className="App bg-dark text-white">
       <Router>
+        <div>
         <Header />
+        </div>
         <Routes>
           <Route path="/" element={<HomeView />} />
           <Route path="/sign-in" element={<SignInView />} />
