@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
@@ -11,38 +11,39 @@ export default function GroupAdminView() {
     const [group, setGroup] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        fetchGroupDetails();
-    }, []);
+    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-    const fetchGroupDetails = async () => {
+ // Use useCallback to ensure fetchGroupDetails is stable
+    const fetchGroupDetails = useCallback(async () => {
         try {
             const response = await axios.get(
-                //'http://localhost:3001/api/groups/${id}'
-                `http://localhost:3001/api/groups/${id}`,
+                `${API_BASE_URL}/groups/${id}`,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
-            
+
             if (response.data.group.owner_id !== user.user_id) {
                 toast.error("Access denied");
                 navigate(`/groups/${id}`);
                 return;
             }
-            
+
             setGroup(response.data.group);
             setLoading(false);
         } catch (error) {
             toast.error("Failed to fetch group details");
             navigate(`/groups/${id}`);
         }
-    };
+    }, [id, token, user.user_id, navigate, API_BASE_URL]);
+
+    useEffect(() => {
+        fetchGroupDetails();
+    }, [fetchGroupDetails]);
 
     const handleRemoveMember = async (memberId) => {
         if (!window.confirm('Are you sure you want to remove this member?')) return;
         try {
             await axios.delete(
-                //'http://localhost:3001/api/groups/${id}'
-                `http://localhost:3001/api/groups/${id}/members/${memberId}`,
+                `${API_BASE_URL}/groups/${id}/members/${memberId}`,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             toast.success('Member removed successfully');
@@ -56,8 +57,7 @@ export default function GroupAdminView() {
         if (!window.confirm('Are you sure you want to delete this group?')) return;
         try {
             await axios.delete(
-                //'http://localhost:3001/api/groups/${id}'
-                `http://localhost:3001/api/groups/${id}`,
+                `${API_BASE_URL}/groups/${id}`,
                 { headers: { Authorization: `Bearer ${token}` } }
             );
             toast.success('Group deleted successfully');
