@@ -17,6 +17,7 @@ import ReviewsList from "./views/ReviewList/ReviewsList";
 import GroupDetails from './views/GroupDetailsView.jsx'
 import PrivateRoute from './routes/PrivateRoute.jsx';
 import GroupAdminView from './views/GroupAdminView';
+import ShowtimesView from './views/Showtimes/ShowtimesView.jsx';
 
 
 export default function App() {
@@ -37,6 +38,7 @@ export default function App() {
           <Route path="/search" element={<SearchView />} />
           <Route path="/search/:query" element={<SearchView />} />
           <Route path="/reviews" element={<ReviewsList />} />
+          <Route path="/showtimes" element={<ShowtimesView />} />
         </Routes>
         <Footer />
       </Router>
