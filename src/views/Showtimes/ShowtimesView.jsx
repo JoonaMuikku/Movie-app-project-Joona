@@ -8,6 +8,7 @@ const ShowtimesView = () => {
   const [error, setError] = useState(null);
   const [moviePosters, setMoviePosters] = useState({}); // Store poster images by movie title
 
+  useEffect(() => {
   const fetchShowtimes = async () => {
     try {
       const response = await axios.get("https://www.finnkino.fi/xml/Schedule");
@@ -29,6 +30,8 @@ const ShowtimesView = () => {
       setLoading(false);
     }
   };
+  fetchShowtimes();
+  }, []);
 
   const fetchMoviePosters = async (shows) => {
     const movieTitles = shows.map((show) => show.title);
@@ -58,10 +61,6 @@ const ShowtimesView = () => {
 
     setMoviePosters(posters);
   };
-
-  useEffect(() => {
-    fetchShowtimes();
-  }, []);
 
   return (
     <div className="container mt-5">
