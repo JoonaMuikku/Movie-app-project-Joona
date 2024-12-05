@@ -73,9 +73,6 @@ export const MovieCard = ({ movie }) => {
             </span>
             <span>{release_date ? movie.release_date.split("-")[0] : "N/A"}</span>
           </p>
-          <button className="btn btn-dark watch-now-button d-flex align-items-center justify-content-center gap-2">
-            <span className="bi bi-play-circle"></span> Watch now
-          </button>
         </div>
         <button
           className={`favorite-btn position-absolute top-0 end-0 m-2 ${isFavorited ? "favorited" : ""}`}
