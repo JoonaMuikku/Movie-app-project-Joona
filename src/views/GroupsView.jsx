@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 export default function GroupsView() {
     const [groups, setGroups] = useState([]);
@@ -11,21 +13,24 @@ export default function GroupsView() {
     const { user, token } = useAuth();
     const navigate = useNavigate();
 
-    useEffect(() => {
-        fetchGroups();
-    }, []);
-
-    const fetchGroups = async () => {
+    const fetchGroups = useCallback(async () => {
         try {
-            const response = await axios.get(
-                //'http://localhost:3001/api/groups/${id}'
-                'http://localhost:3001/api/groups');
+            const response = await axios.get(`${API_BASE_URL}/groups`);
             setGroups(response.data.groups);
         } catch (error) {
             console.error('Error fetching groups:', error);
             toast.error('Failed to fetch groups');
         }
-    };
+    }, []);
+
+    useEffect(() => {
+        fetchGroups();
+    }, [fetchGroups]);
+
+    useEffect(() => {
+        fetchGroups();
+    }, [fetchGroups]);
+
 
     const handleCreateGroup = async (e) => {
         e.preventDefault();
@@ -36,8 +41,7 @@ export default function GroupsView() {
 
         try {
             await axios.post(
-                //'http://localhost:3001/api/groups/${id}'
-                'http://localhost:3001/api/groups/create',
+                `${API_BASE_URL}/groups/create`,
                 { group_name: newGroupName },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
@@ -49,12 +53,12 @@ export default function GroupsView() {
             toast.error('Failed to create group');
         }
     };
-
-    const handleDeleteGroup = async (groupId) => {
+    // unused handleDeleteGroup .....
+    /*const handleDeleteGroup = async (groupId) => {
         try {
             await axios.delete(
                 //'http://localhost:3001/api/groups/${id}'
-                `http://localhost:3001/api/groups/${groupId}`, {
+                `http://localhost:5000/api/groups/${groupId}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             toast.success('Group deleted successfully');
@@ -62,7 +66,7 @@ export default function GroupsView() {
         } catch (error) {
             toast.error('Failed to delete group');
         }
-    };
+    };*/
 
     return (
         <div className="container mt-5">

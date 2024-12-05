@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import './ShowtimeView.css'; // Import custom CSS
 
@@ -8,7 +8,8 @@ const ShowtimesView = () => {
   const [error, setError] = useState(null);
   const [moviePosters, setMoviePosters] = useState({}); // Store poster images by movie title
 
-  const fetchShowtimes = useCallback(async () => {
+  useEffect(() => {
+  const fetchShowtimes = async () => {
     try {
       const response = await axios.get("https://www.finnkino.fi/xml/Schedule");
       const parser = new DOMParser();
@@ -28,7 +29,9 @@ const ShowtimesView = () => {
       setError("Failed to fetch showtimes data. Please try again later.");
       setLoading(false);
     }
-  },[]);
+  };
+  fetchShowtimes();
+  }, []);
 
   const fetchMoviePosters = async (shows) => {
     const movieTitles = shows.map((show) => show.title);
@@ -38,7 +41,7 @@ const ShowtimesView = () => {
       try {
         const tmdbResponse = await axios.get(`https://api.themoviedb.org/3/search/movie`, {
           params: {
-            api_key: "cbf0362bb54624f00a21c2e51270b3a0", //your API key here
+            api_key: process.env.REACT_APP_TMDB_API_KEY,
             query: title,
           },
         });
@@ -58,11 +61,6 @@ const ShowtimesView = () => {
 
     setMoviePosters(posters);
   };
-
-
-  useEffect(() => {
-    fetchShowtimes();
-  }, [fetchShowtimes]);
 
   return (
     <div className="container mt-5">

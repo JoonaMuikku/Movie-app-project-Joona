@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3001/api/users';
+const API_BASE_URL = process.env.REACT_APP_USERS_API_BASE_URL;
 
 // Sign Up
 export const signup = async (userData) => {
