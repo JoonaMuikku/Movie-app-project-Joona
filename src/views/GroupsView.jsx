@@ -4,14 +4,14 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 export default function GroupsView() {
     const [groups, setGroups] = useState([]);
     const [newGroupName, setNewGroupName] = useState('');
     const [showCreateForm, setShowCreateForm] = useState(false);
     const { user, token } = useAuth();
     const navigate = useNavigate();
-
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
     const fetchGroups = useCallback(async () => {
         try {
@@ -21,7 +21,7 @@ export default function GroupsView() {
             console.error('Error fetching groups:', error);
             toast.error('Failed to fetch groups');
         }
-    }, [API_BASE_URL]);
+    }, []);
 
     useEffect(() => {
         fetchGroups();

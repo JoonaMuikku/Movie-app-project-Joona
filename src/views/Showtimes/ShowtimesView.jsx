@@ -41,7 +41,7 @@ const ShowtimesView = () => {
       try {
         const tmdbResponse = await axios.get(`https://api.themoviedb.org/3/search/movie`, {
           params: {
-            api_key: "cbf0362bb54624f00a21c2e51270b3a0", //your API key here
+            api_key: process.env.REACT_APP_TMDB_API_KEY,
             query: title,
           },
         });

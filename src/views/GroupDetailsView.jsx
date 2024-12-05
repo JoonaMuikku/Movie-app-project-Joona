@@ -5,6 +5,8 @@ import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-toastify';
 import { fetchMovieDetails } from "../api/movieApi";
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 export default function GroupDetailsView() {
     const { id } = useParams();
     const [group, setGroup] = useState(null);
@@ -18,8 +20,6 @@ export default function GroupDetailsView() {
     const [groupMovies, setGroupMovies] = useState([]);
     const [showAddMovieModal, setShowAddMovieModal] = useState(false);
     const [movieId, setMovieId] = useState("");
-
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
         const fetchGroupDetails = useCallback(async () => {
             try {
@@ -40,7 +40,7 @@ export default function GroupDetailsView() {
                 }
                 setLoading(false);
             }
-        }, [id, token, API_BASE_URL]);
+        }, [id, token]);
 
         const fetchPendingRequests = useCallback(async () => {
             if (!user || user.user_id !== group?.owner_id) return;
@@ -54,7 +54,7 @@ export default function GroupDetailsView() {
             } catch (error) {
                 console.error('Failed to fetch pending requests:', error);
             }
-        }, [id, token, user, group?.owner_id, API_BASE_URL]);
+        }, [id, token, user, group?.owner_id]);
 
         const fetchGroupMovies = useCallback(async () => {
             try {
@@ -72,7 +72,7 @@ export default function GroupDetailsView() {
             } catch (error) {
                 console.error("Error fetching group movies:", error);
             }
-        }, [id, token, API_BASE_URL])
+        }, [id, token])
 
     
         useEffect(() => {
