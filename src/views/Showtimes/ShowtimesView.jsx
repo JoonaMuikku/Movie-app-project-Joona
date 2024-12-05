@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import './ShowtimeView.css'; // Import custom CSS
 
@@ -8,7 +8,7 @@ const ShowtimesView = () => {
   const [error, setError] = useState(null);
   const [moviePosters, setMoviePosters] = useState({}); // Store poster images by movie title
 
-  const fetchShowtimes = async () => {
+  const fetchShowtimes = useCallback(async () => {
     try {
       const response = await axios.get("https://www.finnkino.fi/xml/Schedule");
       const parser = new DOMParser();
@@ -28,7 +28,7 @@ const ShowtimesView = () => {
       setError("Failed to fetch showtimes data. Please try again later.");
       setLoading(false);
     }
-  };
+  },[]);
 
   const fetchMoviePosters = async (shows) => {
     const movieTitles = shows.map((show) => show.title);
@@ -59,9 +59,10 @@ const ShowtimesView = () => {
     setMoviePosters(posters);
   };
 
+
   useEffect(() => {
     fetchShowtimes();
-  }, []);
+  }, [fetchShowtimes]);
 
   return (
     <div className="container mt-5">

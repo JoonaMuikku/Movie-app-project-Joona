@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
@@ -19,17 +19,8 @@ export default function GroupDetailsView() {
     const [showAddMovieModal, setShowAddMovieModal] = useState(false);
     const [movieId, setMovieId] = useState("");
 
-    useEffect(() => {
-        if (user && token) {
-            fetchGroupDetails();
-            fetchGroupMovies();
-            if (group && user.user_id === group.owner_id) {
-                fetchPendingRequests();
-            }
-        }
-    }, [id, user, token, group?.owner_id]);
-
-    const fetchGroupDetails = async () => {
+  
+    const fetchGroupDetails = useCallback(async () => {
         try {   
             const response = await axios.get(
                 //'http://localhost:3001/api/groups/${id}'
@@ -49,9 +40,9 @@ export default function GroupDetailsView() {
             }
             setLoading(false);
         }
-    };
+    },[token, id]);
 
-    const fetchPendingRequests = async () => {
+    const fetchPendingRequests = useCallback(async () => {
         if (!user || user.user_id !== group?.owner_id) return;
         
         try {
@@ -64,9 +55,9 @@ export default function GroupDetailsView() {
         } catch (error) {
             console.error('Failed to fetch pending requests:', error);
         }
-    };
+    }, [token, id, group?.owner_id, user]);
 
-    const fetchGroupMovies = async () => {
+    const fetchGroupMovies = useCallback(async () => {
         try {
             const response = await axios.get(
                 //'http://localhost:3001/api/groups/${id}'
@@ -83,7 +74,16 @@ export default function GroupDetailsView() {
         } catch (error) {
             console.error("Error fetching group movies:", error);
         }
-    };
+    }, [token, id]);
+        useEffect(() => {
+        if (user && token) {
+            fetchGroupDetails();
+            fetchGroupMovies();
+            if (group && user.user_id === group.owner_id) {
+                fetchPendingRequests();
+            }
+        }
+    }, [group ,id, user, token, group?.owner_id, fetchGroupDetails, fetchGroupMovies, fetchPendingRequests]);
 
     const handleDeleteGroup = async () => {
         if (!window.confirm('Are you sure you want to delete this group?')) return;

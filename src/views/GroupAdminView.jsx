@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
@@ -11,11 +11,8 @@ export default function GroupAdminView() {
     const [group, setGroup] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        fetchGroupDetails();
-    }, []);
-
-    const fetchGroupDetails = async () => {
+  
+    const fetchGroupDetails = useCallback(async () => {
         try {
             const response = await axios.get(
                 //'http://localhost:3001/api/groups/${id}'
@@ -28,14 +25,17 @@ export default function GroupAdminView() {
                 navigate(`/groups/${id}`);
                 return;
             }
-            
             setGroup(response.data.group);
             setLoading(false);
         } catch (error) {
             toast.error("Failed to fetch group details");
             navigate(`/groups/${id}`);
-        }
-    };
+            }
+        }, [id, token, user.user_id, navigate]);
+    
+        useEffect(() => {
+             fetchGroupDetails();
+        }, [fetchGroupDetails]);
 
     const handleRemoveMember = async (memberId) => {
         if (!window.confirm('Are you sure you want to remove this member?')) return;
