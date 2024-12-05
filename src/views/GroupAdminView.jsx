@@ -4,14 +4,14 @@ import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
 export default function GroupAdminView() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { user, token } = useAuth();
     const [group, setGroup] = useState(null);
     const [loading, setLoading] = useState(true);
-
-    const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
  // Use useCallback to ensure fetchGroupDetails is stable
     const fetchGroupDetails = useCallback(async () => {
@@ -33,7 +33,7 @@ export default function GroupAdminView() {
             toast.error("Failed to fetch group details");
             navigate(`/groups/${id}`);
         }
-    }, [id, token, user.user_id, navigate, API_BASE_URL]);
+    }, [id, token, user.user_id, navigate]);
 
     useEffect(() => {
         fetchGroupDetails();
