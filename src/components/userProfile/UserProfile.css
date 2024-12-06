@@ -1,0 +1,199 @@
+/* Side Menu */
+.user-profile-side-menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    background-color: #161b22;
+    color: white;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    z-index: 1050;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+/* Close Button */
+.close-button {
+    position: fixed; /* Fix the button to the top-right corner */
+    top: 15px;
+    right: 15px; /* Adjusted to avoid collision */
+    font-size: 1.5rem;
+    background: none;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    z-index: 1100; /* Ensure it stays above other elements */
+}
+
+.close-button:hover {
+    color: #ff5733;
+}
+
+/* Profile Content */
+.profile-content {
+    display: flex;
+    gap: 20px;
+    height: 100%;
+}
+
+/* Left Section */
+.profile-left {
+    flex: 1;
+    text-align: left;
+    border-right: 1px solid #495057;
+    padding-right: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ensures buttons are at the bottom */
+}
+
+/* User Header */
+.user-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-left: 8px;
+    margin-bottom: 15px;
+}
+
+.user-profile-circle {
+    width: 60px;
+    height: 60px;
+    background-color: #495057;
+    color: white;
+    font-Family: "Arial";
+    font-size: 2rem;
+    font-weight: bold;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.welcome-text {
+    font-size: 1.5rem;
+    padding-bottom: 10px;
+    color: #ffffff;
+    font-Family: "Arial";
+}
+
+/* User Info */
+.user-info-container {
+    margin-top: 20px;
+    padding-left: 10px
+}
+
+.user-info-large {
+    font-size: 1.2rem;
+    margin: 10px 0;
+    color: #d8dee4;
+}
+
+/* Edit Profile Section */
+.edit-profile-section {
+    margin-top: 20px;
+    padding-left: 10px
+}
+
+.edit-dropdown {
+    margin-top: 10px;
+    animation: fadeIn 0.3s ease;
+}
+
+.edit-input {
+    width: 90%;
+    padding: 8px;
+    margin: 10px 0;
+    border: 1px solid #495057;
+    background-color: #1e242d;
+    color: white;
+    border-radius: 5px;
+}
+
+/* Bottom Buttons */
+.bottom-buttons {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.btn {
+    padding: 10px 15px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-edit {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-edit:hover {
+    background-color: #5a6268;
+}
+
+.btn-save {
+    background-color: #28a745;
+    color: white;
+
+}
+
+.btn-save:hover {
+    background-color: #218838;
+}
+
+.btn-logout {
+    background-color: transparent;
+    color: white;
+    border: 1px solid white;
+}
+
+.btn-logout:hover {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c82333;
+}
+
+/* Right Section */
+.profile-right {
+    flex: 1;
+    padding-left: 20px;
+}
+
+.favorite-movies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    background-color: #1e242d;
+    padding: 10px;
+    border-radius: 5px;
+    min-height: 200px;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

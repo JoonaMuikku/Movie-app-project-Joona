@@ -1,162 +1,113 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext"; // Import AuthContext
+import { useAuth } from "../../context/AuthContext.jsx";
 
 export default function SideBarMenu({ isOpen, toggleSidebar }) {
-  const { user, logoutUser, deleteUserAccount } = useAuth(); // Access user, logout, and deleteAccount from AuthContext
-  const [hovered, setHovered] = useState(null); // Track hovered button
+    const { user } = useAuth();
 
-  const handleLogout = async () => {
-    await logoutUser();
-    toggleSidebar();
-  };
-
-  const handleDeleteAccount = async () => {
-    if (window.confirm("Are you sure you want to delete your account? This action is irreversible.")) {
-      try {
-        await deleteUserAccount(); // Call delete account
-        alert("Your account has been deleted.");
-        toggleSidebar(); // Close sidebar after deletion
-      } catch (error) {
-        alert("Failed to delete account: " + error.message);
-      }
-    }
-  };
-
-  return (
-    <>
-      <div
-        className={`d-flex flex-column bg-dark text-white position-fixed top-0 start-0 h-100 p-3 ${isOpen ? "" : "d-none"}`}
-        style={{ width: "250px", zIndex: 1050 }}
-      >
-        {/* App Name */}
-        <Link to="/" className="navbar-brand fw-bold fs-3 mb-3 mb-md-5">
-          Moviq
-        </Link>
-
-        <ul className="nav nav-pills flex-column">
-          {/* User-specific links */}
-          {user ? (
-            <>
-              <li className="nav-item mb-2">
-                <span className="nav-link text-white rounded-0 elem-hover">
-                  <i className="bi bi-person me-2"></i> {user.first_name}
-                </span>
-              </li>
-              <li className="nav-item">
-                <button
-                  className="btn nav-link text-white rounded-0 elem-hover"
-                  onClick={handleLogout}
-                  onMouseEnter={() => setHovered("logout")}
-                  onMouseLeave={() => setHovered(null)}
-                  style={{
-                    backgroundColor: hovered === "logout" ? "#ff5733" : "transparent",
-                    color: hovered === "logout" ? "#ffffff" : "#ffffff",
-                    borderRadius: hovered === "logout" ? "4px" : "0",
-                    padding: "0.5rem 1rem",
-                    textAlign: "left", 
-                    width: "100%", 
-                    cursor: "pointer",
-                    transition: "all 0.3s ease",
-                  }}
-                >
-                  <i className="bi bi-box-arrow-right me-2"></i> Logout
-                </button>
-              </li>
-              <li className="nav-item">
-                <button
-                  className="btn nav-link text-danger rounded-0 elem-hover"
-                  onClick={handleDeleteAccount}
-                  onMouseEnter={() => setHovered("delete")}
-                  onMouseLeave={() => setHovered(null)}
-                  style={{
-                    backgroundColor: hovered === "delete" ? "#721c24" : "transparent",
-                    color: hovered === "delete" ? "#ffffff" : "#dc3545",
-                    borderRadius: hovered === "delete" ? "4px" : "0",
-                    padding: "0.5rem 1rem",
-                    textAlign: "left", 
-                    width: "100%", 
-                    cursor: "pointer", 
-                    transition: "all 0.3s ease",
-                  }}
-                >
-                  <i className="bi bi-trash me-2"></i> Delete Account
-                </button>
-              </li>
-            </>
-          ) : (
-            <>
-              <li className="nav-item mb-2">
-                <Link
-                  to="sign-in"
-                  className="nav-link text-white rounded-0 elem-hover"
-                  onClick={toggleSidebar}
-                >
-                  <i className="bi bi-pencil-square me-2"></i> Sign In
+    return (
+        <>
+            <div
+                className={`d-flex flex-column bg-dark text-white position-fixed top-0 start-0 h-100 p-3 ${isOpen ? "" : "d-none"}`}
+                style={{ width: "250px", zIndex: 1050,
+                  fontFamily: "Arial, sans-serif",
+                  fontSize: "1.1rem",
+                  fontWeight: "bold"
+                 }}
+            >
+                {/* App Name */}
+                <Link to="/" className="navbar-brand fw-bold fs-3 mb-3 mb-md-5">
+                    Moviq
                 </Link>
-              </li>
-              <li className="nav-item mb-2">
-                <Link
-                  to="sign-up"
-                  className="nav-link text-white rounded-0 elem-hover"
-                  onClick={toggleSidebar}
-                >
-                  <i className="bi bi-person-plus me-2"></i> Sign Up
-                </Link>
-              </li>
-            </>
-          )}
 
-          {/* Common links */}
-          <li className="nav-item mb-2">
-            <Link to="/reviews" className="nav-link text-white" onClick={toggleSidebar}>
-              <i className="bi bi-list-stars me-2"></i> Browse Reviews
-            </Link>
-          </li>
+                <ul className="nav nav-pills flex-column">
+                    {user && (
+                        <>
+                            {/* Welcome Text */}
+                            <li className="nav-item mb-2">
+                                <span className="nav-link text-white rounded-0">
+                                    Welcome, {user.first_name}
+                                </span>
+                            </li>
+                        </>
+                    )}
 
-          <li className="nav-item mb-2">
-            <Link
-              to="movies"
-              className="nav-link d-block text-white rounded-0 elem-hover"
-              onClick={toggleSidebar}
-            >
-              <i className="bi bi-archive me-2"></i> Movies
-            </Link>
-          </li>
-          <li className="nav-item">
-           
-           <Link
-              to="groups"
-              className="nav-link text-white rounded-0 elem-hover"
-              onClick={toggleSidebar}
-            >
-              <i className="bi bi-people me-2"></i> Groups
-            </Link>
+                    {/* Common Links with Hover Effects */}
+                    <li className="nav-item mb-2">
+                        <Link
+                            to="/reviews"
+                            className="nav-link text-white rounded-0"
+                            style={{ transition: "background-color 0.3s ease",
+                              fontFamily: "Arial, sans-serif",
+                              fontSize: "1rem",
+                              fontWeight: "bold"
+                             }}
+                            onMouseEnter={(e) => (e.target.style.backgroundColor = "#FF5733")}
+                            onMouseLeave={(e) => (e.target.style.backgroundColor = "transparent")}
+                            onClick={toggleSidebar}
+                        >
+                            <i className="bi bi-list-stars me-2"></i> Browse Reviews
+                        </Link>
+                    </li>
+                    <li className="nav-item mb-2">
+                        <Link
+                            to="/movies"
+                            className="nav-link text-white rounded-0"
+                            style={{ transition: "background-color 0.3s ease",
+                              fontFamily: "Arial, sans-serif",
+                              fontSize: "1rem",
+                              fontWeight: "bold"
+                             }}
+                            onMouseEnter={(e) => (e.target.style.backgroundColor = "#FF5733")}
+                            onMouseLeave={(e) => (e.target.style.backgroundColor = "transparent")}
+                            onClick={toggleSidebar}
+                        >
+                            <i className="bi bi-archive me-2"></i> Movies
+                        </Link>
+                    </li>
+                    <li className="nav-item mb-2">
+                        <Link
+                            to="/groups"
+                            className="nav-link text-white rounded-0"
+                            style={{ transition: "background-color 0.3s ease",
+                              fontFamily: "Arial, sans-serif",
+                              fontSize: "1rem",
+                              fontWeight: "bold"
+                             }}
+                            onMouseEnter={(e) => (e.target.style.backgroundColor = "#FF5733")}
+                            onMouseLeave={(e) => (e.target.style.backgroundColor = "transparent")}
+                            onClick={toggleSidebar}
+                        >
+                            <i className="bi bi-people me-2"></i> Groups
+                        </Link>
+                    </li>
+                    <li className="nav-item mb-2">
+                        <Link
+                            to="/showtimes"
+                            className="nav-link text-white rounded-0"
+                            style={{ transition: "background-color 0.3s ease",  
+                              fontFamily: "Arial, sans-serif",
+                              fontSize: "1rem",
+                              fontWeight: "bold" 
+                            }}
+                            onMouseEnter={(e) => (e.target.style.backgroundColor = "#FF5733")}
+                            onMouseLeave={(e) => (e.target.style.backgroundColor = "transparent")}
+                            onClick={toggleSidebar}
+                        >
+                            <i className="bi bi-calendar-event me-2"></i> Showtimes
+                        </Link>
+                    </li>
+                </ul>
+            </div>
 
-            <li className="nav-item mb-2">
-            <Link
-              to="showtimes" // New Showtimes Link
-              className="nav-link text-white rounded-0 elem-hover"
-              onClick={toggleSidebar}
-            >
-              <i className="bi bi-calendar-event me-2"></i>
-              Showtimes
-            </Link>
-          </li>
-
-
-          </li>
-        </ul>
-      </div>
-
-      {/* Overlay */}
-      {isOpen && (
-        <div
-          className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50"
-          style={{ zIndex: 1049 }}
-          onClick={toggleSidebar}
-        ></div>
-      )}
-    </>
-  );
+            {/* Overlay */}
+            {isOpen && (
+                <div
+                    className="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50"
+                    style={{ zIndex: 1049 }}
+                    onClick={toggleSidebar}
+                ></div>
+            )}
+        </>
+    );
 }

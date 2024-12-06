@@ -32,3 +32,12 @@ export const deleteAccount = async (token) => {
     });
     return response.data;
 };
+
+
+// Update Profile
+export const updateProfile = async (token, updatedData) => {
+    const response = await axios.patch(`${API_BASE_URL}/update-profile`, updatedData, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+};
