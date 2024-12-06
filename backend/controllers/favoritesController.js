@@ -9,19 +9,20 @@ export const addFavorite = async (req, res, next) => {
     try {
         if (!tmdb_id) return res.status(400).json({ error: "TMDB ID is required" });
 
-        // Fetch poster from TMDB
+        // Fetch movie details from TMDB
         const movieResponse = await axios.get(
             `https://api.themoviedb.org/3/movie/${tmdb_id}?api_key=${process.env.TMDB_API_KEY}`
         );
-        const poster_url = `https://image.tmdb.org/t/p/w500${movieResponse.data.poster_path}`;
+        const { title, poster_path } = movieResponse.data;
+        const poster_url = `https://image.tmdb.org/t/p/w500${poster_path}`;
 
         const query = `
-            INSERT INTO favorites (user_id, tmdb_id, poster_url)
-            VALUES ($1, $2, $3)
+            INSERT INTO favorites (user_id, tmdb_id, title, poster_url)
+            VALUES ($1, $2, $3, $4)
             ON CONFLICT (user_id, tmdb_id) DO NOTHING
             RETURNING *;
         `;
-        const result = await pool.query(query, [user_id, tmdb_id, poster_url]);
+        const result = await pool.query(query, [user_id, tmdb_id, title, poster_url]);
 
         if (result.rowCount === 0) {
             return res.status(200).json({ message: "Movie is already in favorites" });
@@ -61,7 +62,7 @@ export const getFavorites = async (req, res, next) => {
     const user_id = req.user.user_id;
 
     try {
-        const query = `SELECT tmdb_id, poster_url FROM favorites WHERE user_id = $1;`;
+        const query = `SELECT tmdb_id, title, poster_url FROM favorites WHERE user_id = $1;`;
         const result = await pool.query(query, [user_id]);
 
         if (result.rows.length === 0) {

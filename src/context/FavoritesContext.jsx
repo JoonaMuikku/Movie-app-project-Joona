@@ -30,8 +30,8 @@ export const FavoritesProvider = ({ children }) => {
     const addToFavorites = async (tmdb_id) => {
         if (!user || !token) throw new Error("User not authenticated.");
         try {
-            await addFavorite(tmdb_id, token);
-            setFavorites((prev) => [...prev, { tmdb_id }]); // Optimistically update state
+            const newFavorite = await addFavorite(tmdb_id, token);
+            setFavorites((prev) => [...prev, newFavorite.favorite]); // Optimistically update state
         } catch (error) {
             console.error("Failed to add to favorites:", error.message);
             throw error;

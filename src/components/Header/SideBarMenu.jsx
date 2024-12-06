@@ -9,10 +9,10 @@ export default function SideBarMenu({ isOpen, toggleSidebar }) {
         <>
             <div
                 className={`d-flex flex-column bg-dark text-white position-fixed top-0 start-0 h-100 p-3 ${isOpen ? "" : "d-none"}`}
-                style={{ width: "250px", zIndex: 1050,
+                style={{ width: "280px", zIndex: 1050,
                   fontFamily: "Arial, sans-serif",
                   fontSize: "1.1rem",
-                  fontWeight: "bold"
+                  fontWeight: "bold",
                  }}
             >
                 {/* App Name */}
