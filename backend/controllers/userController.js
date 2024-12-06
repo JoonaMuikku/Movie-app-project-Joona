@@ -1,6 +1,7 @@
 import { createUser, getUserByEmail, deleteUserByEmail } from "../models/userModel.js";
 import { createToken, hashPassword, comparePassword, blacklistToken } from "../middleware/authMiddleware.js";
 import { ApiError } from "../helpers/errorClass.js";
+import pool from "../config/db.js";
 
 // User registration
 export const postSignup = async (req, res, next) => {
@@ -83,6 +84,34 @@ export const deleteAccount = async (req, res, next) => {
             throw new ApiError("No account found to delete", 404);
         }
     } catch (error) {
+        next(error);
+    }
+};
+
+// Update user
+
+export const updateProfile = async (req, res, next) => {
+    try {
+        const { first_name, last_name } = req.body;
+        const user_id = req.user.user_id; 
+
+        if (!first_name || !last_name) {
+            return res.status(400).json({ message: "First name and last name are required." });
+        }
+
+        // Update user in the database
+        const result = await pool.query(
+            "UPDATE users SET first_name = $1, last_name = $2 WHERE user_id = $3 RETURNING first_name, last_name, email",
+            [first_name, last_name, user_id]
+        );
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ message: "User not found." });
+        }
+
+        res.status(200).json({ message: "Profile updated successfully.", user: result.rows[0] });
+    } catch (error) {
+        console.error("Error updating profile:", error);
         next(error);
     }
 };
