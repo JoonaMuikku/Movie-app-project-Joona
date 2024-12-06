@@ -103,4 +103,4 @@ const ShowtimesView = () => {
   );
 };
 
-export default ShowtimesView;
+export default ShowtimesView ;
