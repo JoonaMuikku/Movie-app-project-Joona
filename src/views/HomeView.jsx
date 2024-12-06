@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { fetchMovies } from '../api/movieApi.jsx';
 import { MovieCard } from '../components/MovieCard/MovieCard.jsx';
 import { Carousel } from 'react-bootstrap';
+import '../components/Showtimes_home_page/Showtimes_card.css'
+import ShowtimesHomeView from '../components/Showtimes_home_page/Showtime_homeView.jsx'
 
 export default function HomeView() {
     const [movies, setMovies] = useState([]);
@@ -53,6 +55,9 @@ export default function HomeView() {
                 ) : (
                     <p className="text-center">Loading...</p>
                 )}
+                    <div classname ="showtimes-homepage">
+                        <ShowtimesHomeView />
+                    </div>
             </div>
         </>
     );

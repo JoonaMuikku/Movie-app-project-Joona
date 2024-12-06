@@ -1,0 +1,135 @@
+.showtime-card {
+    background-color: #444; /* Card background color */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 10px; /* Reduced padding for smaller cards */
+    display: flex;
+    align-items: flex-start; /* Align items to the start (top) */
+    margin-bottom: 10px; /* Space between cards */
+    width: 90%; /* Adjust width to fit better */
+    max-width: 300px; /* Set a maximum width for the cards */
+    height: auto; /* Allow height to adjust based on content */
+    overflow: hidden; /* Hide overflow */
+}
+
+.showtime-content {
+    display: flex;
+    flex-direction: row; /* Keep image and text in a row */
+    gap: 10px; /* Space between image and text */
+}
+
+.showtime-info {
+    flex-grow: 1; /* Allow the info to take the remaining space */
+    text-align: left; /* Align text to the left */
+    overflow: hidden; /* Hide overflow text */
+}
+
+.showtime-title {
+    font-size: 1.1rem; /* Smaller title font size */
+    font-weight: bold;
+    color: #fff; /* White title for contrast */
+    margin: 0; /* Remove default margin */
+}
+
+.showtime-info p {
+    font-size: 0.9rem; /* Smaller font size for other text */
+    color: #ddd; /* Light color for other text */
+}
+
+.showtime-time {
+    font-size: 0.8rem; /* Smaller font size */
+    color: #ddd; /* Light color for date */
+}
+
+.movie-title {
+    font-size: 0.9rem; /* Smaller font size */
+    font-weight: bold;
+    color: #fff; /* White title for contrast */
+    margin: 0; /* Remove default margin */
+}
+
+.theater-location {
+    font-size: 0.7rem; /* Smaller font size */
+    color: #bbb; /* Slightly lighter color for location */
+}
+
+@media (max-width: 768px) {
+    .showtime-title {
+        font-size: 1rem; /* Smaller title font size on smaller screens */
+    }
+
+    .showtime-info p {
+        font-size: 0.9rem; /* Smaller font size for other text */
+    }
+}
+
+
+.showtime-content {
+    display: flex; /* Use flexbox for layout */
+}
+
+.showtime-image img {
+    width: 100px; /* Smaller image size */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 4px; /* Optional: rounded corners */
+}
+.showtime-poster {
+    width: 100px; /* Set a fixed width for the poster */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 4px; /* Optional: rounded corners */
+}
+
+.no-poster {
+    width: 100px; /* Same width as poster */
+    height: 150px; /* Fixed height for no poster placeholder */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ccc; /* Placeholder background color */
+    border-radius: 4px; /* Optional: rounded corners */
+    color: #666; /* Placeholder text color */
+}
+
+
+.pagination {
+    display: flex;
+    justify-content: center; /* Center the pagination buttons */
+    align-items: center; /* Center vertically */
+    margin-top: 20px;
+}
+
+.page-button {
+    margin: 0 5px; /* Space between buttons */
+    padding: 10px 15px; /* Padding for buttons */
+    border: none; /* Remove default border */
+    background-color: #007bff; /* Primary color */
+    color: white; /* Text color */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transition */
+    font-size: 1rem; /* Font size */
+}
+
+.page-button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+    transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+.page-button.active {
+    background-color: #0056b3; /* Active button color */
+    font-weight: bold; /* Bold text for active button */
+}
+
+span {
+    margin: 0 5px; /* Space around ellipsis */
+    font-size: 1rem; /* Font size for ellipsis */
+    color: #007bff; /* Color for ellipsis */
+}
+
+.showtimes-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow cards to wrap to the next line */
+    gap: 15px; /* Space between each showtime card */
+    justify-content: center; /* Center the cards in the container */
+    padding: 20px; /* Add some padding around the container */
+}

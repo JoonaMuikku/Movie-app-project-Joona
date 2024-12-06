@@ -81,6 +81,6 @@ export const MovieCard = ({ movie }) => {
           {isFavorited ? "💖" : "🤍"}
         </button>
       </div>
-    </div>
-  );
+    </div>
+  );
 };
