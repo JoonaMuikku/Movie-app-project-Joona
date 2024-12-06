@@ -16,15 +16,6 @@ CREATE TABLE users (
    password VARCHAR NOT NULL,
    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
--- Favorites Table 
-CREATE TABLE favorites (
-    favorite_id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
-    tmdb_id INT NOT NULL,                     -- Reference TMDB movie ID
-    poster_url TEXT,                          -- Stores the movie's poster URL
-    UNIQUE (user_id, tmdb_id)
-);
-
 -- Reviews Table
 CREATE TABLE reviews (
     review_id SERIAL PRIMARY KEY,                -- Unique identifier for each review
@@ -35,6 +26,15 @@ CREATE TABLE reviews (
     rating NUMERIC(3, 1) NOT NULL,               -- Rating with one decimal place
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Review creation timestamp
     updated_at TIMESTAMP                         -- Timestamp for when the review is updated
+);
+-- Favorites Table
+CREATE TABLE favorites (
+    favorite_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    tmdb_id INT NOT NULL,                     -- Reference TMDB movie ID
+    poster_url TEXT,                          -- Stores the movie's poster URL
+    title TEXT,                               -- Stores the movie's title
+    UNIQUE (user_id, tmdb_id)                 -- Ensures no duplicate favorites for a user
 );
 
 -- Groups Table
