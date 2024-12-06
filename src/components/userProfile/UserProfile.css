@@ -12,43 +12,63 @@
     z-index: 1050;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
+    overflow-y: hidden;
+}
+
+/* Overlay */
+.user-profile-overlay-container {
+    position: relative;
+}
+.fav-head{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    left: 20px
+}
+
+.user-profile-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1049; /* Behind the side menu */
 }
 
 /* Close Button */
 .close-button {
-    position: fixed; /* Fix the button to the top-right corner */
-    top: 15px;
-    right: 15px; /* Adjusted to avoid collision */
-    font-size: 1.5rem;
+    position: fixed;
+    top: 1px;
+    right: 15px;
+    font-size: 2rem;
     background: none;
-    color: white;
+    color: rgb(255, 0, 0);
     border: none;
     cursor: pointer;
     transition: color 0.3s ease;
-    z-index: 1100; /* Ensure it stays above other elements */
+    z-index: 1100;
 }
 
 .close-button:hover {
-    color: #ff5733;
+    color: #d18a7a;
 }
 
 /* Profile Content */
 .profile-content {
     display: flex;
     gap: 20px;
-    height: 100%;
+    height: calc(100% - 60px); /* Reserve space for pagination */
 }
 
 /* Left Section */
 .profile-left {
     flex: 1;
+    text-align: center; /* Center text horizontally */
     text-align: left;
     border-right: 1px solid #495057;
     padding-right: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Ensures buttons are at the bottom */
+    justify-content: center;
 }
 
 /* User Header */
@@ -65,7 +85,7 @@
     height: 60px;
     background-color: #495057;
     color: white;
-    font-Family: "Arial";
+    font-family: "Arial";
     font-size: 2rem;
     font-weight: bold;
     border-radius: 50%;
@@ -76,27 +96,28 @@
 
 .welcome-text {
     font-size: 1.5rem;
-    padding-bottom: 10px;
+    margin-top: 5px;
     color: #ffffff;
-    font-Family: "Arial";
+    font-family: "Arial";
 }
 
 /* User Info */
 .user-info-container {
     margin-top: 20px;
-    padding-left: 10px
+    padding-left: 10px;
 }
 
 .user-info-large {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     margin: 10px 0;
     color: #d8dee4;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 /* Edit Profile Section */
 .edit-profile-section {
     margin-top: 20px;
-    padding-left: 10px
+    padding-left: 10px;
 }
 
 .edit-dropdown {
@@ -112,6 +133,7 @@
     background-color: #1e242d;
     color: white;
     border-radius: 5px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 /* Bottom Buttons */
@@ -129,6 +151,7 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 .btn-edit {
@@ -143,7 +166,6 @@
 .btn-save {
     background-color: #28a745;
     color: white;
-
 }
 
 .btn-save:hover {
@@ -154,6 +176,7 @@
     background-color: transparent;
     color: white;
     border: 1px solid white;
+    bottom: 0;
 }
 
 .btn-logout:hover {
@@ -164,6 +187,8 @@
 .btn-delete {
     background-color: #dc3545;
     color: white;
+    bottom: 0;
+    
 }
 
 .btn-delete:hover {
@@ -176,16 +201,105 @@
     padding-left: 20px;
 }
 
-.favorite-movies {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    background-color: #1e242d;
+/* Favorites Section Grid */
+.favorite-movies-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two movies per row */
+    grid-auto-rows: 250px; /* Fixed movie height */
+    gap: 15px;
+    flex-grow: 1;
+}
+
+/* Favorite Movie Card */
+.favorite-movie-card {
+    background-color: #25292d;
+    color: white;
     padding: 10px;
-    border-radius: 5px;
-    min-height: 200px;
+    border-radius: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.favorite-movie-card img {
+    width: 95%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 11px;
+}
+
+.favorite-movie-card h5 {
+    margin: 10px;
+    font-size: 1rem;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.favorite-movie-card .favorite-movie-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    width: 90%;
+}
+
+.favorite-movie-card .btn-remove {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 8px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.favorite-movie-card .btn-remove:hover {
+    background-color: #c82333;
+}
+
+.favorite-movie-card .btn-details {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.favorite-movie-card .btn-details:hover {
+    background-color: #0056b3;
+}
+
+/* Pagination Controls */
+.pagination-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    bottom: 20px;
+    width: calc(55% - 100px); /* Account for side padding */
+}
+
+.pagination-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pagination-btn:hover {
+    background-color: #0056b3;
 }
 
 /* Fade-in Animation */
