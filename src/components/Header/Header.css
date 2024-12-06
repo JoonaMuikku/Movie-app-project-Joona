@@ -1,10 +1,75 @@
-.btn-orange {
-  background-color: #d97706; /* Dark orange color */
-  color: #fff; /* White text */
-  border: none; /* Remove border */
+/* Sign In Button */
+.sign-in-button {
+  font-family: Arial, sans-serif;
+  font-size: 1.1rem;
+  font-weight: bold;
+  background-color: transparent;
+  color: white;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 5px 15px;
+  transition: background-color 0.3s ease, border 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
 }
 
-.btn-orange:hover {
-  background-color: #c2410c; /* Slightly darker orange on hover */
-  color: #fff; /* Ensure text stays white */
+.sign-in-button:hover {
+  background-color: #28a745;
+  border: 1px solid #28a745;
+  color: white;
+  transform: scale(1.05); /* Slight zoom effect */
+}
+
+/* Logout Button */
+.logout-button {
+  font-family: Arial, sans-serif;
+  font-size: 1.1rem;
+  font-weight: bold;
+  background-color: transparent;
+  color: white;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 5px 15px;
+  transition: background-color 0.3s ease, border 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+
+.logout-button:hover {
+  background-color: #e7330a;
+  border: 1px solid #ff2f00;
+  color: white;
+  transform: scale(1.05); /* Slight zoom effect */
+}
+
+/* User Profile Square */
+.user-profile-square {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Arial, sans-serif;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  background-color: #495057; /* Neutral gray */
+  border-radius: 4px;
+  padding: 5px 10px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.user-profile-square:hover {
+  background-color: #6c757d; /* Slightly lighter gray */
+  transform: scale(1.05); /* Subtle zoom effect */
+}
+
+/* Profile Icon */
+.profile-icon {
+  margin-right: 8px;
+  font-size: 1.5rem;
+  color: white;
+}
+
+/* Profile Initials */
+.profile-initials {
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
 }
