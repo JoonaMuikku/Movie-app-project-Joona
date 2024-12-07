@@ -138,7 +138,7 @@ export default function MovieDetails() {
           <p>{movie.overview}</p>
           <p><strong>Release Date:</strong> {movie.release_date}</p>
           <p><strong>Language:</strong> {movie.original_language}</p>
-          <p><strong>Rating:</strong> {movie.vote_average}</p>
+          <p><strong>Rating:</strong> {(movie.vote_average).toFixed(1)}</p>
           {movie.genres && movie.genres.length > 0 && (
           <p><strong>Genres:</strong>{" "}
             {movie.genres.map((genre) => genre.name).join(", ")}
