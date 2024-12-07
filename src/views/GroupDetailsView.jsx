@@ -185,9 +185,16 @@ export default function GroupDetailsView() {
 
     return (
         <div className="container mt-5">
-            <div className="card">
-                <div className="card-header d-flex justify-content-between align-items-center">
-                    <h2>{group.group_name}</h2>
+            <div className="card" style={{ 
+                backgroundColor: '#2A2A2A',
+                transform: 'none',
+                transition: 'none'
+            }}>
+                <div className="card-header d-flex justify-content-between align-items-center" style={{
+                    transform: 'none',
+                    transition: 'none'
+                }}>
+                    <h2 style={{ color: '#FFD700' }}>{group.group_name}</h2>
                     {user && user.user_id === group.owner_id && (
                         <button 
                             className="btn btn-primary"
@@ -197,8 +204,11 @@ export default function GroupDetailsView() {
                         </button>
                     )}
                 </div>
-                <div className="card-body">
-                    <h5>Group Owner</h5>
+                <div className="card-body text-white" style={{
+                    transform: 'none',
+                    transition: 'none'
+                }}>
+                    <h5 style={{ color: '#FFD700' }}>Group Owner</h5>
                     <p>{group.owner_first_name} {group.owner_last_name}</p>
                     {user && !isMember && !isRequested && (
                         <div className="mb-3">
@@ -225,10 +235,12 @@ export default function GroupDetailsView() {
                     )}
                     {user && user.user_id === group.owner_id && joinRequests.length > 0 && (
                         <div className="mt-4">
-                            <h5>Join Requests</h5>
+                            <h5 style={{ color: '#FFD700' }}>Join Requests</h5>
                             <div className="list-group">
                                 {joinRequests.map(request => (
-                                    <div key={request.request_id} className="list-group-item">
+                                    <div key={request.request_id} 
+                                         className="list-group-item" 
+                                         style={{ backgroundColor: '#2A2A2A', color: 'white', border: '1px solid #444' }}>
                                         <div className="d-flex justify-content-between align-items-center">
                                             <span>{request.first_name} {request.last_name}</span>
                                             <div>
@@ -261,58 +273,60 @@ export default function GroupDetailsView() {
                             </button>
                         </div>
                     )}
-                    <div className="mt-4">
-                        <h3>Group Movies</h3>
+                    <div className="mt-5">
+                        <h3 style={{ 
+                            color: '#FFD700',
+                            position: 'absolute',
+                            top: '215px',
+                            zIndex: 1
+                        }}>Group Movies</h3>
                         <div className="row">
-                        {groupMovies.map((groupMovie) => (
-    <div 
-        key={groupMovie.group_movie_id} 
-        className="col-md-4 mb-4"
-    >
-        <div className="card">
-            <div 
-                onClick={() => navigate(`/movie/${groupMovie.tmdb_id}`)}
-                style={{ cursor: 'pointer' }}
-            >
-                <img 
-                    src={`https://image.tmdb.org/t/p/w500${groupMovie.details.poster_path}`}
-                    className="card-img-top"
-                    alt={groupMovie.details.title}
-                />
-                <div className="card-body">
-                    <h5 className="card-title">{groupMovie.details.title}</h5>
-                    <p className="card-text">
-                        Added by: {groupMovie.first_name} {groupMovie.last_name}
-                    </p>
-                    <small className="text-muted">
-                        Added on: {new Date(groupMovie.added_at).toLocaleDateString()}
-                    </small>
-                </div>
-            </div>
-            {(user?.user_id === group.owner_id || user?.user_id === groupMovie.added_by) && (
-                <div className="card-footer">
-                    <button
-                        className="btn btn-danger btn-sm w-100"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            handleRemoveMovie(groupMovie.group_movie_id);
-                        }}
-                    >
-                        Remove Movie
-                    </button>
-                </div>
-            )}
-        </div>
-    </div>
-))}
+                            {groupMovies.map((groupMovie) => (
+                                <div key={groupMovie.group_movie_id} className="col-md-4 mb-4">
+                                    <div className="card" style={{ backgroundColor: '#2A2A2A' }}>
+                                        <div onClick={() => navigate(`/movie/${groupMovie.tmdb_id}`)}
+                                             style={{ cursor: 'pointer' }}>
+                                            <img 
+                                                src={`https://image.tmdb.org/t/p/w500${groupMovie.details.poster_path}`}
+                                                className="card-img-top"
+                                                alt={groupMovie.details.title}
+                                            />
+                                            <div className="card-body text-white">
+                                                <h5 className="card-title" style={{ color: '#FFD700' }}>
+                                                    {groupMovie.details.title}
+                                                </h5>
+                                                <p className="card-text">
+                                                    Added by: {groupMovie.first_name} {groupMovie.last_name}
+                                                </p>
+                                                <small className="text-muted">
+                                                    Added on: {new Date(groupMovie.added_at).toLocaleDateString()}
+                                                </small>
+                                            </div>
+                                        </div>
+                                        {(user?.user_id === group.owner_id || user?.user_id === groupMovie.added_by) && (
+                                            <div className="card-footer" style={{ backgroundColor: '#222' }}>
+                                                <button
+                                                    className="btn btn-danger btn-sm w-100"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        handleRemoveMovie(groupMovie.group_movie_id);
+                                                    }}
+                                                >
+                                                    Remove Movie
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
             </div>
             {showAddMovieModal && (
                 <div className="modal-overlay">
-                    <div className="modal-content">
-                        <h2>Add Movie to Group</h2>
+                    <div className="modal-content" style={{ backgroundColor: '#2A2A2A', color: 'white' }}>
+                        <h2 style={{ color: '#FFD700' }}>Add Movie to Group</h2>
                         <form onSubmit={handleAddMovie}>
                             <input
                                 type="text"
@@ -321,17 +335,27 @@ export default function GroupDetailsView() {
                                 value={movieId}
                                 onChange={(e) => setMovieId(e.target.value)}
                                 required
+                                style={{ 
+                                    backgroundColor: '#ffffff', 
+                                    color: '#000000',
+                                    border: '1px solid #444',
+                                    padding: '8px 12px',
+                                    width: '100%',
+                                    borderRadius: '4px'
+                                }}
                             />
-                            <button type="submit" className="btn btn-primary">
-                                Add Movie
-                            </button>
-                            <button
-                                type="button"
-                                className="btn btn-secondary ms-2"
-                                onClick={() => setShowAddMovieModal(false)}
-                            >
-                                Cancel
-                            </button>
+                            <div className="d-flex gap-2">
+                                <button type="submit" className="btn btn-primary">
+                                    Add Movie
+                                </button>
+                                <button
+                                    type="button"
+                                    className="btn btn-primary"
+                                    onClick={() => setShowAddMovieModal(false)}
+                                >
+                                    Cancel
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>
