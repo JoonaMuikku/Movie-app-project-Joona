@@ -71,10 +71,10 @@ export default function GroupsView() {
     return (
         <div className="container mt-5">
             <div className="d-flex justify-content-between align-items-center mb-4">
-                <h1>Groups</h1>
+                <h1 style={{ color: '#FFD700' }}>Groups</h1>
                 {user && (
                     <button
-                        className="btn btn-orange"
+                        className="btn btn-primary"
                         onClick={() => setShowCreateForm(!showCreateForm)}
                     >
                         {showCreateForm ? 'Cancel' : 'Create New Group'}
@@ -93,7 +93,7 @@ export default function GroupsView() {
                             onChange={(e) => setNewGroupName(e.target.value)}
                             required
                         />
-                        <button type="submit" className="btn btn-orange">
+                        <button type="submit" className="btn btn-primary">
                             Create
                         </button>
                     </div>
@@ -103,10 +103,10 @@ export default function GroupsView() {
             <div className="row">
                 {groups.map((group) => (
                     <div key={group.group_id} className="col-md-4 mb-4">
-                        <div className="card">
+                        <div className="card" style={{ backgroundColor: '#2A2A2A' }}>
                             <div className="card-body">
-                                <h5 className="card-title">{group.group_name}</h5>
-                                <p className="card-text">
+                                <h5 className="card-title" style={{ color: '#FFD700' }}>{group.group_name}</h5>
+                                <p className="card-text text-white">
                                     Owner: {group.first_name} {group.last_name}
                                     <br />
                                     Members: {group.member_count}
@@ -122,7 +122,7 @@ export default function GroupsView() {
                                 <div className="d-flex justify-content-between">
                                     {user && (user.user_id === group.owner_id || group.is_member) && (
                                         <button
-                                            className="btn btn-orange"
+                                            className="btn btn-primary"
                                             onClick={() => navigate(`/groups/${group.group_id}`)}
                                         >
                                             View Group
