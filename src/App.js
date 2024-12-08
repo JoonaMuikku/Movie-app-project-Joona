@@ -29,6 +29,7 @@ export default function App() {
         <div>
         <Header />
         </div>
+        <main>
         <Routes>
           <Route path="/" element={<HomeView />} />
           <Route path="/sign-in" element={<SignInView />} />
@@ -44,6 +45,7 @@ export default function App() {
           <Route path="/showtimes" element={<ShowtimesView />} />
           <Route path="/shared/:username" element={<SharedFavorites />} />
         </Routes>
+        </main>
         <Footer />
       </Router>
       <ToastContainer position="top-center" autoClose={2000} /> {/* Add ToastContainer */}
