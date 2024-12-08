@@ -15,6 +15,24 @@
 .App{
   min-height: 100vh;
 }
+
+html, body, #root, .App {
+  display: flex;
+  flex-direction: column; 
+}
+
+.App {
+  flex: 1; 
+}
+
+main {
+  flex: 1; 
+}
+
+footer {
+  margin-top: auto; 
+}
+
 /* TODO: make carousel design RESPONSIVE */
 
 .carousel-control-prev {
@@ -61,4 +79,21 @@
 ._navigation {
   border-bottom: 2px solid var(--gray);
   z-index: 3000;
+}
+
+.search-view .movie-card {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.search-view .movie-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
