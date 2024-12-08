@@ -430,3 +430,94 @@ export const removeGroupMovie = async (req, res, next) => {
         next(error);
     }
 };
+
+// Adds a showtime to group
+export const addShowtimeToGroup = async (req, res, next) => {
+    try {
+        const { group_id } = req.params;
+        const { movie_title, theatre, start_time, end_time } = req.body;
+        const user_id = req.user.user_id;
+
+        // Verifies if user is group member
+        const memberCheckQuery = `
+            SELECT * FROM group_users WHERE group_id = $1 AND user_id = $2;
+        `;
+        const memberCheck = await pool.query(memberCheckQuery, [group_id, user_id]);
+
+        if (memberCheck.rowCount === 0) {
+            throw new ApiError("User is not a member of this group", 403);
+        }
+
+        // Adds showtime to group
+        const addShowtimeQuery = `
+            INSERT INTO group_showtimes 
+            (group_id, movie_title, theatre, start_time, end_time, added_by)
+            VALUES ($1, $2, $3, $4, $5, $6)
+            RETURNING *;
+        `;
+        const result = await pool.query(
+            addShowtimeQuery, 
+            [group_id, movie_title, theatre, start_time, end_time, user_id]
+        );
+
+        res.status(201).json({ 
+            message: "Showtime added to group successfully",
+            showtime: result.rows[0]
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Gets group showtimes
+export const getGroupShowtimes = async (req, res, next) => {
+    try {
+        const { id: group_id } = req.params;
+        
+        const query = `
+            SELECT gs.*, u.first_name, u.last_name
+            FROM group_showtimes gs
+            JOIN users u ON gs.added_by = u.user_id
+            WHERE gs.group_id = $1
+            ORDER BY gs.start_time ASC;
+        `;
+        
+        const result = await pool.query(query, [group_id]);
+        res.status(200).json({ showtimes: result.rows });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const removeGroupShowtime = async (req, res, next) => {
+    try {
+        const { group_id, showtime_id } = req.params;
+        const user_id = req.user.user_id;
+
+        // Verifies if user is a group member
+        const memberCheckQuery = `
+            SELECT * FROM group_users WHERE group_id = $1 AND user_id = $2;
+        `;
+        const memberCheck = await pool.query(memberCheckQuery, [group_id, user_id]);
+
+        if (memberCheck.rowCount === 0) {
+            throw new ApiError("User is not a member of this group", 403);
+        }
+
+        // Removes the showtime
+        const query = `
+            DELETE FROM group_showtimes 
+            WHERE group_id = $1 AND showtime_id = $2 
+            RETURNING *;
+        `;
+        const result = await pool.query(query, [group_id, showtime_id]);
+
+        if (result.rowCount === 0) {
+            throw new ApiError("Showtime not found", 404);
+        }
+
+        res.status(200).json({ message: "Showtime removed successfully" });
+    } catch (error) {
+        next(error);
+    }
+};
