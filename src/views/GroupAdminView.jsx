@@ -71,13 +71,13 @@ export default function GroupAdminView() {
 
     return (
         <div className="container mt-5">
-            <div className="card">
+            <div className="card" style={{ backgroundColor: '#2A2A2A' }}>
                 <div className="card-header">
-                    <h2>{group.group_name} Admin Panel</h2>
+                    <h2 style={{ color: '#FFD700' }}>{group.group_name} Admin Panel</h2>
                 </div>
-                <div className="card-body">
-                    <h3>Members</h3>
-                    <table className="table">
+                <div className="card-body text-white">
+                    <h3 style={{ color: '#FFD700' }}>Members</h3>
+                    <table className="table table-dark">
                         <thead>
                             <tr>
                                 <th>Username</th>
@@ -107,7 +107,7 @@ export default function GroupAdminView() {
                     
                     <div className="mt-4 d-flex justify-content-between">
                         <button
-                            className="btn btn-secondary"
+                            className="btn btn-primary"
                             onClick={() => navigate(`/groups/${id}`)}
                         >
                             Back to Group

@@ -6,6 +6,7 @@ drop table if exists favorites cascade;
 drop table if exists reviews cascade;
 drop table if exists group_join_requests cascade;
 drop table if exists group_movies cascade;
+drop table if exists group_showtimes cascade;
 
 -- Users Table
 CREATE TABLE users (
@@ -66,6 +67,18 @@ CREATE TABLE group_movies (
     group_movie_id SERIAL PRIMARY KEY,
     group_id INTEGER REFERENCES groups(group_id) ON DELETE CASCADE,
     tmdb_id INTEGER NOT NULL,
+    added_by INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Group Showtimes Table
+CREATE TABLE group_showtimes (
+    showtime_id SERIAL PRIMARY KEY,
+    group_id INTEGER REFERENCES groups(group_id) ON DELETE CASCADE,
+    movie_title VARCHAR(255) NOT NULL,
+    theatre VARCHAR(255) NOT NULL,
+    start_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP NOT NULL,
     added_by INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
     added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

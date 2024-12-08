@@ -12,7 +12,10 @@ import {
     getPendingRequests,
     addMovieToGroup,
     getGroupMovies,
-    removeGroupMovie
+    removeGroupMovie,
+    addShowtimeToGroup,
+    getGroupShowtimes,
+    removeGroupShowtime
 } from "../controllers/groupController.js";
 
 const router = express.Router();
@@ -29,5 +32,8 @@ router.get("/:id/requests", verifyToken, getPendingRequests);
 router.post("/:group_id/movies", verifyToken, addMovieToGroup);
 router.get("/:id/movies", verifyToken, getGroupMovies);
 router.delete("/:group_id/movies/:movie_id", verifyToken, removeGroupMovie);
+router.post("/:group_id/showtimes", verifyToken, addShowtimeToGroup);
+router.get("/:id/showtimes", verifyToken, getGroupShowtimes);
+router.delete("/:group_id/showtimes/:showtime_id", verifyToken, removeGroupShowtime);
 
 export default router;
