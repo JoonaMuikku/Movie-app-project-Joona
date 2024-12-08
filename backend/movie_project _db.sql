@@ -15,8 +15,11 @@ CREATE TABLE users (
    last_name VARCHAR NOT NULL,
    email VARCHAR UNIQUE NOT NULL,
    password VARCHAR NOT NULL,
-   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+   username VARCHAR(50) UNIQUE NOT NULL,
+   is_public BOOLEAN DEFAULT TRUE
 );
+
 -- Reviews Table
 CREATE TABLE reviews (
     review_id SERIAL PRIMARY KEY,                -- Unique identifier for each review

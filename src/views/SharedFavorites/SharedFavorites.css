@@ -1,0 +1,59 @@
+.shared-favorites-container {
+    padding: 20px;
+    color: #fff;
+    font-family: Arial, sans-serif;
+  }
+  
+  .shared-favorites-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    text-align: center;
+  }
+  
+  .shared-favorites-error,
+  .shared-favorites-empty {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1.1rem;
+    color: #ccc;
+  }
+  
+  .shared-favorites-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .shared-favorite-card {
+    width: 200px;
+    text-align: center;
+    background-color: #2c2f33;
+    border-radius: 8px;
+    padding: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+  }
+  
+  .shared-favorite-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  }
+  
+  .shared-favorite-poster {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+  }
+  
+  .shared-favorite-title {
+    font-size: 1rem;
+    margin-top: 10px;
+    color: #fff;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
