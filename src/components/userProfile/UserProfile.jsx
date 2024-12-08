@@ -57,7 +57,6 @@ export default function UserProfile({ user, onClose }) {
     const indexOfLastMovie = currentPage * moviesPerPage;
     const indexOfFirstMovie = indexOfLastMovie - moviesPerPage;
     const currentMovies = favorites.slice(indexOfFirstMovie, indexOfLastMovie);
-
     const totalPages = Math.ceil(favorites.length / moviesPerPage);
 
     const nextPage = () => {
@@ -76,16 +75,17 @@ export default function UserProfile({ user, onClose }) {
         navigate(`/movie/${tmdb_id}`);
     };
 
+    // Construct the share URL
+    const shareURL = `${window.location.origin}/shared/${user.username}`;
+
     return (
         <div className="user-profile-overlay-container">
-            {/* Overlay to disable interaction with home page */}
             <div className="user-profile-overlay" onClick={onClose}></div>
             <div className="user-profile-side-menu">
                 <button className="close-button" onClick={onClose}>
                     &times;
                 </button>
                 <div className="profile-content">
-                    {/* Left Section: User Info */}
                     <div className="profile-left">
                         <div className="user-header">
                             <div className="user-profile-circle">
@@ -133,6 +133,27 @@ export default function UserProfile({ user, onClose }) {
                                 </div>
                             )}
                         </div>
+
+                        {/* Share Public Favorites Section */}
+                        <div style={{ marginTop: "20px", paddingLeft: '10px' }}>
+                            <p className="user-info-large">Share your favorite movies link:</p>
+                            <input
+                                type="text"
+                                readOnly
+                                value={shareURL}
+                                style={{ width: "100%", marginBottom: "10px" }}
+                            />
+                            <button
+                                className="btn btn-edit"
+                                onClick={() => {
+                                    navigator.clipboard.writeText(shareURL);
+                                    toast.success("Link copied to clipboard!");
+                                }}
+                            >
+                                Copy Link
+                            </button>
+                        </div>
+
                         <div className="bottom-buttons">
                             <button className="btn btn-logout" onClick={handleLogout}>
                                 Logout
@@ -143,7 +164,6 @@ export default function UserProfile({ user, onClose }) {
                         </div>
                     </div>
 
-                    {/* Right Section: Favorites */}
                     <div className="profile-right">
                         <h3 className="fav-head">Favorite Movies</h3>
                         <div className="favorite-movies-grid">

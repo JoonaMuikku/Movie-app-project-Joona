@@ -6,19 +6,35 @@ import pool from "../config/db.js";
 // User registration
 export const postSignup = async (req, res, next) => {
     try {
-        const { first_name, last_name, email, password } = req.body;
+        const { first_name, last_name, email, password, username } = req.body;
 
         if (!first_name || !last_name || !email || !password) {
             throw new ApiError("All fields are required", 400);
         }
 
+        if (!username) {
+            // If username is not provided, auto-generate one based on the email or name.
+            // For example:
+            const generatedUsername = email.split("@")[0] + Math.floor(Math.random() * 1000);
+            req.body.username = generatedUsername;
+        }
+
         const hashedPassword = await hashPassword(password);
-        const result = await createUser(first_name, last_name, email, hashedPassword);
+        const result = await createUser(first_name, last_name, email, hashedPassword, req.body.username);
         const user = result.rows[0];
 
-        const token = createToken({ user_id: user.user_id, email: user.email }); // Generate token
+        const token = createToken({ user_id: user.user_id, email: user.email, username: user.username }); // Generate token
       
-        res.status(201).json({ message: "User registered successfully", user, token });
+        res.status(201).json({ message: "User registered successfully",  
+            user: {
+            user_id: user.user_id,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            email: user.email,
+            username: user.username,
+            is_public: user.is_public,
+        }, token });
+
     } catch (error) {
         if (error.code === "23505") {
             next(new ApiError("Email already exists", 409));
@@ -40,7 +56,7 @@ export const postLogin = async (req, res, next) => {
         const user = userResult.rows[0];
         if (!(await comparePassword(password, user.password))) return next(new ApiError("Invalid credentials", 401));
 
-        const token = createToken({ user_id: user.user_id, email: user.email });
+        const token = createToken({ user_id: user.user_id, email: user.email, username: user.username });
         res.status(200).json({
             message: "Login successful",
             user: {
@@ -48,6 +64,8 @@ export const postLogin = async (req, res, next) => {
                 first_name: user.first_name,
                 last_name: user.last_name,
                 email: user.email,
+                username: user.username,
+                is_public: user.is_public,
             },
             token,
         });
@@ -89,29 +107,41 @@ export const deleteAccount = async (req, res, next) => {
 };
 
 // Update user
-
 export const updateProfile = async (req, res, next) => {
     try {
-        const { first_name, last_name } = req.body;
-        const user_id = req.user.user_id; 
+        const { first_name, last_name, is_public } = req.body;
+        const user_id = req.user.user_id;
 
         if (!first_name || !last_name) {
             return res.status(400).json({ message: "First name and last name are required." });
         }
 
-        // Update user in the database
-        const result = await pool.query(
-            "UPDATE users SET first_name = $1, last_name = $2 WHERE user_id = $3 RETURNING first_name, last_name, email",
-            [first_name, last_name, user_id]
-        );
+        // Start building the query
+        let query = "UPDATE users SET first_name = $1, last_name = $2";
+        const params = [first_name, last_name];
+
+        // If is_public is provided and is boolean, update it as well
+        if (typeof is_public === "boolean") {
+            query += ", is_public = $3 WHERE user_id = $4 RETURNING first_name, last_name, email, username, is_public";
+            params.push(is_public, user_id);
+        } else {
+            query += " WHERE user_id = $3 RETURNING first_name, last_name, email, username, is_public";
+            params.push(user_id);
+        }
+
+        const result = await pool.query(query, params);
 
         if (result.rowCount === 0) {
             return res.status(404).json({ message: "User not found." });
         }
 
-        res.status(200).json({ message: "Profile updated successfully.", user: result.rows[0] });
+        res.status(200).json({
+            message: "Profile updated successfully.",
+            user: result.rows[0],
+        });
     } catch (error) {
         console.error("Error updating profile:", error);
         next(error);
     }
 };
+
