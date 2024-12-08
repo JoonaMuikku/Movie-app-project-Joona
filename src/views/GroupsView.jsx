@@ -53,20 +53,6 @@ export default function GroupsView() {
             toast.error('Failed to create group');
         }
     };
-    // unused handleDeleteGroup .....
-    /*const handleDeleteGroup = async (groupId) => {
-        try {
-            await axios.delete(
-                //'http://localhost:3001/api/groups/${id}'
-                `http://localhost:5000/api/groups/${groupId}`, {
-                headers: { Authorization: `Bearer ${token}` }
-            });
-            toast.success('Group deleted successfully');
-            fetchGroups();
-        } catch (error) {
-            toast.error('Failed to delete group');
-        }
-    };*/
 
     return (
         <div className="container mt-5">
