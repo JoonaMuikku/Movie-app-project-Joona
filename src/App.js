@@ -18,6 +18,7 @@ import GroupDetails from './views/GroupDetailsView.jsx'
 import PrivateRoute from './routes/PrivateRoute.jsx';
 import GroupAdminView from './views/GroupAdminView';
 import ShowtimesView from './views/Showtimes/ShowtimesView.jsx';
+import SharedFavorites from './views/SharedFavorites/SharedFavorites.jsx';
 
 
 export default function App() {
@@ -28,6 +29,7 @@ export default function App() {
         <div>
         <Header />
         </div>
+        <main>
         <Routes>
           <Route path="/" element={<HomeView />} />
           <Route path="/sign-in" element={<SignInView />} />
@@ -41,7 +43,9 @@ export default function App() {
           <Route path="/search/:query" element={<SearchView />} />
           <Route path="/reviews" element={<ReviewsList />} />
           <Route path="/showtimes" element={<ShowtimesView />} />
+          <Route path="/shared/:username" element={<SharedFavorites />} />
         </Routes>
+        </main>
         <Footer />
       </Router>
       <ToastContainer position="top-center" autoClose={2000} /> {/* Add ToastContainer */}

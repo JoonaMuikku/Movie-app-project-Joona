@@ -74,3 +74,33 @@ export const getFavorites = async (req, res, next) => {
         next(error);
     }
 };
+
+// Fetch public favorites for a given username
+export const getPublicFavorites = async (req, res, next) => {
+    const { username } = req.params;
+
+    try {
+      const userQuery = `SELECT user_id, is_public, first_name, last_name, username FROM users WHERE username = $1;`;
+      const userResult = await pool.query(userQuery, [username]);
+
+      if (userResult.rows.length === 0) {
+        return res.status(404).json({ error: "User not found" });
+      }
+  
+      const { user_id, is_public, first_name, last_name } = userResult.rows[0];
+  
+      if (!is_public) {
+        return res.status(403).json({ error: "User's favorites are not public" });
+      }
+  
+      const favoritesQuery = `SELECT tmdb_id, title, poster_url FROM favorites WHERE user_id = $1;`;
+      const favoritesResult = await pool.query(favoritesQuery, [user_id]);
+  
+      res.status(200).json({
+        user: { first_name, last_name, username },
+        favorites: favoritesResult.rows
+      });
+    } catch (error) {
+      next(error);
+    }
+  };

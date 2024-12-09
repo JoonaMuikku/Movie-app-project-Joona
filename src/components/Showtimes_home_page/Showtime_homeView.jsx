@@ -103,7 +103,7 @@ const ShowtimesHomeView = () => {
         // Add "Previous" button
         if (currentPage > 1) {
             pageButtons.push(
-                <button key="prev" onClick={() => paginate(currentPage - 1)} className="page-button">
+                <button key="prev" onClick={() => paginate(currentPage - 1)} className="btn btn-orange page-button">
                     Previous
                 </button>
             );
@@ -115,7 +115,7 @@ const ShowtimesHomeView = () => {
                 <button
                     key={i}
                     onClick={() => paginate(i)}
-                    className={`page-button ${currentPage === i ? 'active' : ''}`}
+                    className= {`btn btn-orange page-button ${currentPage === i ? 'active' : ''}`}
                 >
                     {i}
                 </button>
@@ -126,7 +126,7 @@ const ShowtimesHomeView = () => {
         if (endPage < totalPages) {
             pageButtons.push(<span key="ellipsis">...</span>);
             pageButtons.push(
-                <button key={totalPages} onClick={() => paginate(totalPages)} className="page-button">
+                <button key={totalPages} onClick={() => paginate(totalPages)} className="btn btn-orange page-button">
                     {totalPages}
                 </button>
             );
@@ -135,7 +135,7 @@ const ShowtimesHomeView = () => {
         // Add "Next" button
         if (currentPage < totalPages) {
             pageButtons.push(
-                <button key="next" onClick={() => paginate(currentPage + 1)} className="page-button">
+                <button key="next" onClick={() => paginate(currentPage + 1)} className="btn btn-orange page-button">
                     Next
                 </button>
             );

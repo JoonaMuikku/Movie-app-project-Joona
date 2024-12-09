@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { fetchMovies } from "../api/movieApi";
@@ -24,14 +23,18 @@ export default function SearchView() {
     }, [searchParams]);
 
     return (
-        <div style={{ padding: "20px",  }}>
-            <h1 style={{ textAlign: "center", padding: "10px", fontSize: "2em" }}>Search Results</h1>
+        <div className="container py-4">
+            <h1 className="text-center mb-4">Search Results</h1>
 
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "20px" }}>
+            <div className="row">
                 {movies.length > 0 ? (
-                    movies.map((movie) => <MovieCard key={movie.id} movie={movie} />)
+                    movies.map((movie) => (
+                        <div className="col-md-2 mb-4" key={movie.id}>
+                            <MovieCard movie={movie} />
+                        </div>
+                    ))
                 ) : (
-                    <p style={{ textAlign: "center", width: "100%" }}>No results found.......</p>
+                    <p className="text-center w-100">No results found...</p>
                 )}
             </div>
         </div>
