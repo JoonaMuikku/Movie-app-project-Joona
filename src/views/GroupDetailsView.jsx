@@ -254,7 +254,7 @@ export default function GroupDetailsView() {
             setMovieId("");
             fetchGroupMovies();
         } catch (error) {
-            toast.error("Failed to add movie to group");
+            toast.error(error.response?.data?.error || "Failed to add movie to group");
         }
     };
 
@@ -289,13 +289,22 @@ export default function GroupDetailsView() {
                     transition: 'none'
                 }}>
                     <h2 style={{ color: '#FFD700' }}>{group.group_name}</h2>
-                    {user && user.user_id === group.owner_id && (
-                        <button 
-                            className="btn btn-primary"
-                            onClick={() => navigate(`/groups/${id}/admin`)}
-                        >
-                            Admin Panel
-                        </button>
+                    {user && (
+                        user.user_id === group.owner_id ? (
+                            <button 
+                                className="btn btn-primary"
+                                onClick={() => navigate(`/groups/${id}/admin`)}
+                            >
+                                Admin Panel
+                            </button>
+                        ) : isMember && (
+                            <button 
+                                className="btn btn-danger"
+                                onClick={handleLeaveGroup}
+                            >
+                                Leave Group
+                            </button>
+                        )
                     )}
                 </div>
                 <div className="card-body text-white" style={{
@@ -318,14 +327,6 @@ export default function GroupDetailsView() {
                         <div className="alert alert-info">
                             Your join request is pending
                         </div>
-                    )}
-                    {user && isMember && user.user_id !== group.owner_id && (
-                        <button 
-                            className="btn btn-danger"
-                            onClick={handleLeaveGroup}
-                        >
-                            Leave Group
-                        </button>
                     )}
                     {user && user.user_id === group.owner_id && joinRequests.length > 0 && (
                         <div className="mt-4">
