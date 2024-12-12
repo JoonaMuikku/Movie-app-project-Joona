@@ -1,4 +1,4 @@
- Custom Styles for Showtimes /
+Custom Styles for Showtimes /
 .showtimes-container {
   display: flex;
   flex-direction: column;
@@ -74,4 +74,49 @@
   .showtime-title {
     font-size: 1.3rem;
   }
+}
+
+/* Search Bar Styling */
+.search-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 15px; /* Space between elements */
+  padding: 20px; /* Add spacing */
+  background-color: #3a3f44; /* Dark background color for search bar */
+  border-radius: 8px; /* Rounded corners for search bar */
+  margin-bottom: 20px; /* Space below the search bar */
+}
+
+.search-bar .form-select,
+.search-bar .form-control {
+  width: 250px; /* Set a consistent width */
+  padding: 10px; /* Add padding */
+  border-radius: 5px; /* Rounded corners */
+  border: 1px solid #555; /* Border color */
+  background-color: #444; /* Match the card background */
+  color: #fff; /* Text color */
+}
+
+.search-bar .form-select:focus,
+.search-bar .form-control:focus {
+  outline: none;
+  border-color: #007bff; /* Highlighted border color */
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.6); /* Blue glow */
+}
+
+.search-bar .btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-bar .btn:hover {
+  background-color: #0056b3; /* Darker blue */
 }
