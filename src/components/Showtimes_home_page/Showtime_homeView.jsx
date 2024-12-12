@@ -1,174 +1,151 @@
-import React  from 'react'
-import ShowtimeCard from './Showtime_card'
-import axios from 'axios';
-import { useEffect, useState } from 'react';
+import React, { useContext, useState } from "react";
+import { ShowtimesContext } from "../../context/ShowtimesContext";
+import ShowtimeCard from "./Showtime_card";
+import "./Showtimes_card.css";
 
 const ShowtimesHomeView = () => {
-    const [showtimes, setShowtimes] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [moviePosters, setMoviePosters] = useState({}); // Store poster images by movie title
+  const { showtimes, moviePosters, areas, loading, error, fetchShowtimes } =
+    useContext(ShowtimesContext);
 
+  const [selectedArea, setSelectedArea] = useState("");
+  const [searchTitle, setSearchTitle] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
-     // Pagination state
-     const [currentPage, setCurrentPage] = useState(1);
-     const itemsPerPage = 6; // Number of items to display per page
+  const handleAreaChange = (areaId) => {
+    setSelectedArea(areaId);
+    fetchShowtimes(areaId);
+    setCurrentPage(1); // Reset pagination on area change
+  };
 
+  const filteredShowtimes = showtimes.filter((show) =>
+    show.title.toLowerCase().includes(searchTitle.toLowerCase())
+  );
 
-    useEffect(() => {
-        const fetchShowtimes = async () => {
-            try {
-                const response = await axios.get("https://www.finnkino.fi/xml/Schedule");
-                const parser = new DOMParser();
-                const xmlDoc = parser.parseFromString(response.data, "text/xml");
-                const shows = Array.from(xmlDoc.getElementsByTagName("Show")).map((show) => ({
-                    title: show.getElementsByTagName("Title")[0]?.textContent,
-                    theatre: show.getElementsByTagName("Theatre")[0]?.textContent,
-                    startTime: show.getElementsByTagName("dttmShowStart")[0]?.textContent,
-                    endTime: show.getElementsByTagName("dttmShowEnd")[0]?.textContent,
-                }));
-                setShowtimes(shows);
-                await fetchMoviePosters(shows); // Fetch movie posters after fetching showtimes
-                setLoading(false);
-            } catch (err) {
-                setError("Failed to fetch showtimes data. Please try again later.");
-                setLoading(false);
-            }
-        };
+  // Pagination logic
+  const indexOfLastShowtime = currentPage * itemsPerPage;
+  const indexOfFirstShowtime = indexOfLastShowtime - itemsPerPage;
+  const currentShowtimes = filteredShowtimes.slice(
+    indexOfFirstShowtime,
+    indexOfLastShowtime
+  );
 
-        const fetchMoviePosters = async (shows) => {
-            const movieTitles = shows.map((show) => show.title);
-            const posters = {};
+  const totalPages = Math.ceil(filteredShowtimes.length / itemsPerPage);
 
-            for (const title of movieTitles) {
-                try {
-                    const tmdbResponse = await axios.get(`https://api.themoviedb.org/3/search/movie`, {
-                        params: {
-                            api_key: process.env.REACT_APP_TMDB_API_KEY,
-                            query: title,
-                        },
-                    });
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-                    const posterPath = tmdbResponse.data.results[0]?.poster_path;
-                    if (posterPath) {
-                        posters[title] = `https://image.tmdb.org/t/p/w500${posterPath}`;
-                    } else {
-                        posters[title] = null; // No poster found for this movie
-                    }
-                } catch (err) {
-                    console.error(`Error fetching poster for ${title}:`, err);
-                    posters[title] = null; // In case of any errors
-                }
-            }
+  const renderPagination = () => {
+    const pageButtons = [];
+    const maxButtons = 5;
+    let startPage, endPage;
 
-            setMoviePosters(posters);
-        };
+    if (totalPages <= maxButtons) {
+      startPage = 1;
+      endPage = totalPages;
+    } else {
+      if (currentPage <= 3) {
+        startPage = 1;
+        endPage = maxButtons;
+      } else if (currentPage + 2 >= totalPages) {
+        startPage = totalPages - maxButtons + 1;
+        endPage = totalPages;
+      } else {
+        startPage = currentPage - 2;
+        endPage = currentPage + 2;
+      }
+    }
 
-        fetchShowtimes();
-    }, []);
+    if (currentPage > 1) {
+      pageButtons.push(
+        <button
+          key="prev"
+          onClick={() => paginate(currentPage - 1)}
+          className="btn btn-orange page-button"
+        >
+          Previous
+        </button>
+      );
+    }
 
-    // Calculate the current items to display
-    const indexOfLastShowtime = currentPage * itemsPerPage;
-    const indexOfFirstShowtime = indexOfLastShowtime - itemsPerPage;
-    const currentShowtimes = showtimes.slice(indexOfFirstShowtime, indexOfLastShowtime);
+    for (let i = startPage; i <= endPage; i++) {
+      pageButtons.push(
+        <button
+          key={i}
+          onClick={() => paginate(i)}
+          className={`btn btn-orange page-button ${
+            currentPage === i ? "active" : ""
+          }`}
+        >
+          {i}
+        </button>
+      );
+    }
 
-    // Change page
-    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+    if (currentPage < totalPages) {
+      pageButtons.push(
+        <button
+          key="next"
+          onClick={() => paginate(currentPage + 1)}
+          className="btn btn-orange page-button"
+        >
+          Next
+        </button>
+      );
+    }
 
-    // Calculate total pages
-    const totalPages = Math.ceil(showtimes.length / itemsPerPage);
+    return pageButtons;
+  };
 
-    // Create pagination buttons
-    const renderPagination = () => {
-        const pageButtons = [];
-        const maxButtons = 5; // Maximum number of buttons to display
-        let startPage, endPage;
-    
-        if (totalPages <= maxButtons) {
-            startPage = 1;
-            endPage = totalPages;
-        } else {
-            if (currentPage <= 3) {
-                startPage = 1;
-                endPage = maxButtons;
-            } else if (currentPage + 2 >= totalPages) {
-                startPage = totalPages - maxButtons + 1;
-                endPage = totalPages;
-            } else {
-                startPage = currentPage - 2;
-                endPage = currentPage + 2;
-            }
-        }
-    
-        // Add "Previous" button
-        if (currentPage > 1) {
-            pageButtons.push(
-                <button key="prev" onClick={() => paginate(currentPage - 1)} className="btn btn-orange page-button">
-                    Previous
-                </button>
-            );
-        }
-    
-        // Add page number buttons
-        for (let i = startPage; i <= endPage; i++) {
-            pageButtons.push(
-                <button
-                    key={i}
-                    onClick={() => paginate(i)}
-                    className= {`btn btn-orange page-button ${currentPage === i ? 'active' : ''}`}
-                >
-                    {i}
-                </button>
-            );
-        }
-    
-        // Add ellipsis if needed
-        if (endPage < totalPages) {
-            pageButtons.push(<span key="ellipsis">...</span>);
-            pageButtons.push(
-                <button key={totalPages} onClick={() => paginate(totalPages)} className="btn btn-orange page-button">
-                    {totalPages}
-                </button>
-            );
-        }
-    
-        // Add "Next" button
-        if (currentPage < totalPages) {
-            pageButtons.push(
-                <button key="next" onClick={() => paginate(currentPage + 1)} className="btn btn-orange page-button">
-                    Next
-                </button>
-            );
-        }
-    
-        return pageButtons;
-    };
+  return (
+    <div className="container mt-5 showtimes-home-container">
+      <h2 className="text-center mb-4">Showtimes</h2>
 
-    return (
-        <div className="container mt-5">
-            <h2 className="text-center mb-4">Showtimes</h2>
-            {loading && <p>Loading showtimes...</p>}
-            {error && <p className="text-danger">{error}</p>}
-            {!loading && !error && (
-                <div className="showtimes-container">
-                    {currentShowtimes.map((show, index) => (
-                        <ShowtimeCard
-                            key={index}
-                            startTime={new Date(show.startTime).toLocaleString()}
-                            endTime={new Date(show.endTime).toLocaleString()}
-                            movieTitle={show.title}
-                            theaterLocation={show.theatre}
-                            posterUrl={moviePosters[show.title]} // Pass the poster URL
-                        />
-                    ))}
-                </div>
-            )}
-            {/* Pagination Controls */}
-            <div className="pagination">
-                {renderPagination()}
-            </div>
-        </div>
-    );
+      {/* Search Bar */}
+      <div className="search-bar mb-4">
+        <select
+          value={selectedArea}
+          onChange={(e) => handleAreaChange(e.target.value)}
+          className="form-select mb-2"
+        >
+          <option value="">All Areas</option>
+          {areas.map((area) => (
+            <option key={area.id} value={area.id}>
+              {area.name}
+            </option>
+          ))}
+        </select>
+        <input
+          type="text"
+          placeholder="Search by movie title"
+          value={searchTitle}
+          onChange={(e) => setSearchTitle(e.target.value)}
+          className="form-control"
+        />
+      </div>
+
+      {loading && <p>Loading showtimes...</p>}
+      {error && <p className="text-danger">{error}</p>}
+      {!loading && !error && (
+        <>
+          <div className="showtimes-container">
+            {currentShowtimes.map((show, index) => (
+              <ShowtimeCard
+                key={index}
+                startTime={new Date(show.startTime).toLocaleString()}
+                endTime={new Date(show.endTime).toLocaleString()}
+                movieTitle={show.title}
+                theaterLocation={show.theatre}
+                posterUrl={moviePosters[show.title]}
+              />
+            ))}
+          </div>
+
+          {/* Pagination Controls */}
+          <div className="pagination">{renderPagination()}</div>
+        </>
+      )}
+    </div>
+  );
 };
 
 export default ShowtimesHomeView;

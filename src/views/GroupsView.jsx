@@ -97,22 +97,24 @@ export default function GroupsView() {
                                     <br />
                                     Members: {group.member_count}
                                 </p>
-                                {user && user.user_id !== group.owner_id && (
-                                    <button
-                                        className="btn btn-primary mb-2"
-                                        onClick={() => navigate(`/groups/${group.group_id}`)}
-                                    >
-                                        Join Group
-                                    </button>
-                                )}
-                                <div className="d-flex justify-content-between">
-                                    {user && (user.user_id === group.owner_id || group.is_member) && (
-                                        <button
-                                            className="btn btn-primary"
-                                            onClick={() => navigate(`/groups/${group.group_id}`)}
-                                        >
-                                            View Group
-                                        </button>
+                                <div className="d-flex flex-column gap-2">
+                                    {user && (
+                                        user.user_id === group.owner_id || group.is_member ? (
+                                            <button
+                                                className="btn btn-primary w-100"
+                                                onClick={() => navigate(`/groups/${group.group_id}`)}
+                                            >
+                                                View Group
+                                            </button>
+                                        ) : (
+                                            <button
+                                                className="btn w-100"
+                                                style={{ backgroundColor: '#FF7560', color: 'white' }}
+                                                onClick={() => navigate(`/groups/${group.group_id}`)}
+                                            >
+                                                View Group
+                                            </button>
+                                        )
                                     )}
                                 </div>
                             </div>

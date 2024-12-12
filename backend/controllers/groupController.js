@@ -1,5 +1,6 @@
 import pool from "../config/db.js";
 import { ApiError } from "../helpers/errorClass.js";
+import axios from "axios";
 
 // Create a new group
 export const createGroup = async (req, res, next) => {
@@ -35,14 +36,32 @@ export const createGroup = async (req, res, next) => {
 // Get all groups
 export const getAllGroups = async (req, res, next) => {
     try {
+        const user_id = req.user?.user_id;
+        
         const query = `
-            SELECT g.*, u.first_name, u.last_name, 
-            (SELECT COUNT(*) FROM group_users WHERE group_id = g.group_id) as member_count
+            SELECT 
+                g.group_id,
+                g.group_name,
+                g.owner_id,
+                u.first_name,
+                u.last_name,
+                COUNT(DISTINCT gu.user_id) as member_count,
+                CASE 
+                    WHEN EXISTS (
+                        SELECT 1 
+                        FROM group_users gu2 
+                        WHERE gu2.group_id = g.group_id 
+                        AND gu2.user_id = $1
+                    ) THEN true
+                    ELSE false
+                END as is_member
             FROM groups g
             JOIN users u ON g.owner_id = u.user_id
-            ORDER BY g.created_at DESC;
+            LEFT JOIN group_users gu ON g.group_id = gu.group_id
+            GROUP BY g.group_id, g.group_name, g.owner_id, u.first_name, u.last_name;
         `;
-        const result = await pool.query(query);
+        
+        const result = await pool.query(query, [user_id || null]);
         res.status(200).json({ groups: result.rows });
     } catch (error) {
         next(error);
@@ -206,7 +225,7 @@ export const handleJoinRequest = async (req, res, next) => {
         }
 
         if (action === 'accept') {
-            // Add user to group
+            // Adds user to group
             const acceptRequestQuery = `
                 WITH request_data AS (
                     SELECT group_id, user_id FROM group_join_requests
@@ -354,15 +373,25 @@ export const addMovieToGroup = async (req, res, next) => {
         const { tmdb_id } = req.body;
         const user_id = req.user.user_id;
 
-        // Check if user is a member of the group
+        // Verifies the movie exists in TMDB
+        try {
+            await axios.get(
+                `https://api.themoviedb.org/3/movie/${tmdb_id}?api_key=${process.env.TMDB_API_KEY}`
+            );
+        } catch (error) {
+            return res.status(400).json({ error: "Failed to add a movie (TMDB Movie ID is invalid)" });
+        }
+
+        // Checks if user is group member
         const memberCheckQuery = `
-            SELECT 1 FROM group_users 
-            WHERE group_id = $1 AND user_id = $2;
+            SELECT 1 FROM group_users WHERE group_id = $1 AND user_id = $2
+            UNION
+            SELECT 1 FROM groups WHERE group_id = $1 AND owner_id = $2;
         `;
         const memberCheck = await pool.query(memberCheckQuery, [group_id, user_id]);
 
         if (memberCheck.rowCount === 0) {
-            throw new ApiError("Only group members can add movies", 403);
+            throw new ApiError("User is not a member of this group", 403);
         }
 
         // Add movie to group
@@ -392,8 +421,36 @@ export const getGroupMovies = async (req, res, next) => {
             ORDER BY gm.added_at DESC;
         `;
         const result = await pool.query(query, [group_id]);
-        
-        res.status(200).json({ movies: result.rows });
+
+        // If no movies found, returns an empty array
+        if (result.rows.length === 0) {
+            return res.status(200).json({ movies: [] });
+        }
+
+        // Verifies each movie exists in TMDB and collect valid movies
+        const validMovies = [];
+        for (const movie of result.rows) {
+            try {
+                const tmdbResponse = await axios.get(
+                    `https://api.themoviedb.org/3/movie/${movie.tmdb_id}?api_key=${process.env.TMDB_API_KEY}`
+                );
+                validMovies.push({
+                    ...movie,
+                    tmdb_data: tmdbResponse.data
+                });
+            } catch (error) {
+                if (error.response && error.response.status === 404) {
+                    // Movie not found in TMDB, deletes it from group_movies
+                    const deleteQuery = `
+                        DELETE FROM group_movies 
+                        WHERE group_id = $1 AND tmdb_id = $2;
+                    `;
+                    await pool.query(deleteQuery, [group_id, movie.tmdb_id]);
+                } 
+            }
+        }
+
+        res.status(200).json({ movies: validMovies });
     } catch (error) {
         next(error);
     }
@@ -404,7 +461,7 @@ export const removeGroupMovie = async (req, res, next) => {
         const { group_id, movie_id } = req.params;
         const user_id = req.user.user_id;
 
-        // Check if user is group owner or the one who added the movie
+        // Checks if user is group owner or the one who added the movie
         const checkQuery = `
             SELECT 1 FROM groups g
             LEFT JOIN group_movies gm ON g.group_id = gm.group_id
@@ -418,7 +475,7 @@ export const removeGroupMovie = async (req, res, next) => {
             throw new ApiError("You don't have permission to remove this movie", 403);
         }
 
-        // Remove the movie
+        // Removes the movie
         const removeQuery = `
             DELETE FROM group_movies 
             WHERE group_id = $1 AND group_movie_id = $2;

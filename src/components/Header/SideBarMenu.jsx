@@ -52,22 +52,6 @@ export default function SideBarMenu({ isOpen, toggleSidebar }) {
                     </li>
                     <li className="nav-item mb-2">
                         <Link
-                            to="/movies"
-                            className="nav-link text-white rounded-0"
-                            style={{ transition: "background-color 0.3s ease",
-                              fontFamily: "Arial, sans-serif",
-                              fontSize: "1rem",
-                              fontWeight: "bold"
-                             }}
-                            onMouseEnter={(e) => (e.target.style.backgroundColor = "#FF5733")}
-                            onMouseLeave={(e) => (e.target.style.backgroundColor = "transparent")}
-                            onClick={toggleSidebar}
-                        >
-                            <i className="bi bi-archive me-2"></i> Movies
-                        </Link>
-                    </li>
-                    <li className="nav-item mb-2">
-                        <Link
                             to="/groups"
                             className="nav-link text-white rounded-0"
                             style={{ transition: "background-color 0.3s ease",
