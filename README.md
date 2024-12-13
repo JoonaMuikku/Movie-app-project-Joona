@@ -131,6 +131,10 @@ REACT_APP_DEBUG_MODE=true
 ```
 
 5. Start the frontend React application and backend server with the appropriate commands.
+   ![frontend command](images/front-end-command.png)
+
+   ![backend command](images/back-end-command.png)
+   
 6. Access the application at `http://localhost:{PORT}`.
 
 ## GitHub Repository
