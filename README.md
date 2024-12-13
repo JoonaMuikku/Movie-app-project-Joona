@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Moviq is a web-based movie application that allows users to explore movie showtimes, manage their favorite films, and share reviews with other users. The application integrates with The Movie Database (TMDB) API to fetch movie details, including posters and reviews, while utilizing the Finnkino API to provide real-time showtimes for movies in Finland. Users can create accounts, log in, and manage their favorite movies and reviews.
+Moviq is a web-based movie application that allows users to explore movie showtimes, manage their favorite films, and share reviews with other users. The application integrates with The Movie Database (TMDB) API to fetch movie details, including posters and reviews. while utilizing the Finnkino API to provide real-time showtimes for movies in Finland. Users can create accounts, log in, and manage their favorite movies and reviews.
 
 ## Features
 
