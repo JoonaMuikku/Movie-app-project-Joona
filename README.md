@@ -58,6 +58,8 @@ Moviq is a web-based movie application that allows users to explore movie showti
 
 The relational database was implemented using PostgreSQL. Below is the database structure diagram:
 
+![Alt text](Moviq-movie-app/images/database-diagram.png)
+
 ### Tables Overview
 
 - **users**: Stores user data (names, email, username, privacy preferences, and timestamps).
