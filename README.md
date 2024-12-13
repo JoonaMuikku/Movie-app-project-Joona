@@ -11,7 +11,7 @@ Moviq is a web-based movie application that allows users to explore movie showti
 - **Movie Search**: Movies can be filtered by title, release year, and genre.
 - **Showtimes**: Browse the Finnkino showtimes of various theaters.
 - **Groups**: Signed-up users can join, create, and manage their own groups.
-- **Membership Management**: Group admins can accept or decline join requests and remove existing members from the group.
+- **Membership Management**: Group admins can accept or decline join requests and remove existing members from a group.
 - **Movie Reviews**: Signed-in users can create reviews with a comment and star rating, edit, and delete reviews.
 - **Favorites**: Signed-in users can favorite movies and share a link to their favorites list.
 - **Optional Features**: User profile page, group admin dashboard.
@@ -52,7 +52,7 @@ Moviq is a web-based movie application that allows users to explore movie showti
 | Masrur Hasan        | Frontend features, responsiveness                                            |
 | Sauhardha Khatri    | Backend and frontend features, managing backlog, database design, documenting REST API, database structure |
 | Bidimaryam Jakipbaeva | Frontend features, responsiveness                                          |
-| Joona Muikku        | Backend and frontend features                                                |
+| Joona Muikku        | Backend and frontend features, group pages                                   |
 
 ## Architecture Layer of Moviq
 
